@@ -19,6 +19,12 @@ class CreateSchedulingsTable extends Migration
             $table->time('hour')->nullable(false);
             $table->string('health_insurence')->nullable(false);
             $table->string('place')->nullable(false);
+            $table->foreignId('customer_id')
+                ->unsigned();
+            $table->foreign('customer_id')
+                ->references('id')
+                ->on('customers')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Attendents extends Authenticatable
+class Schedulings extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -23,7 +23,7 @@ class Attendents extends Authenticatable
     ];
 
     public function customer() {
-        return $this->belongsTo('App\Customer');
+        return $this->belongsTo(\App\Models\Customers::class);
     }
     
 }

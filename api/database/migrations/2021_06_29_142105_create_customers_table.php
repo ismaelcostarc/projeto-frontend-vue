@@ -18,15 +18,15 @@ class CreateCustomersTable extends Migration
             $table->string('cpf')->nullable(false)->unique();
             $table->string('name', 200)->nullable(false);
             $table->string('password', 191)->nullable(false);
-            $table->integer('phone', 11);
-            $table->integer('birthday', 8);
-            $table->integer('zipcode', 8);
+            $table->string('phone', 20);
+            $table->date('birthday');
+            $table->string('zipcode', 8);
             $table->string('state', 2);
             $table->string('city', 20);
-            $table->integer('attendents_id')
+            $table->foreignId('attendent_id')
                 ->nullable()
                 ->unsigned();
-            $table->foreign('attendents_id')
+            $table->foreign('attendent_id')
                 ->references('id')
                 ->on('attendents')
                 ->onDelete('cascade');
