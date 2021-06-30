@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomersController extends Controller
 {
@@ -23,16 +24,27 @@ class CustomersController extends Controller
         }
 
         return response()->json(['cpfIsRegistered' => $cpfIsRegistered]);
-        //dd($customer);
     }
 
     public function index()
     {
-        $customer = Customers::all();
-        if ($customer->count() == 0) {
+        //Autorização
+        //Caso o usuário autenticado seja um atendente, o index() retorna todos os clientes;
+        //Caso o usuário seja um cliente, index retorna apenas os dados dele
+        $model = Auth::user()::class;
+
+        //Cliente
+        if ($model == Customers::class) {
+            $customer = Customers::find(Auth::user()->id);
+            return response()->json($customer);
+        }
+
+        //Atendente
+        $customers = Customers::all();
+        if ($customers->count() == 0) {
             return response()->json([], 204);
         }
-        return response()->json($customer);
+        return response()->json($customers);
     }
 
     public function store(Request $request)
@@ -70,6 +82,13 @@ class CustomersController extends Controller
 
     public function show($id)
     {
+        //Autorização
+        //Apenas atendentes podem ver dados de um cliente em específico
+        $model = Auth::user()::class;
+
+        if ($model == Customers::class)
+            return response()->json([], 401);
+
         $customer = Customers::find($id);
         if (!$customer) {
             return response()->json([

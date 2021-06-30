@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/', CustomersController::class . '@index')->name('index');
         //R
         Route::get('/{id}', CustomersController::class . '@show')->name('show');
+
+        /*************************** AUTORIZAÇÃO NÃO FEITA AINDA *****************************/
         //U
         Route::patch('/{id}', CustomersController::class . '@update')->name('update');
         //D
@@ -51,6 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::patch('/', CustomersController::class . '@update')->name('update');
         //D
         Route::delete('/', CustomersController::class . '@destroy')->name('destroy');
+        /***************************************************************************************/ 
     });
     //Rotas para agendamentos
     Route::prefix('/schedulings')->name('schedulings.')->group(function () {
