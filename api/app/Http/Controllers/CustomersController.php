@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Customers;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+
 class CustomersController extends Controller
 {
     /**
@@ -21,8 +25,29 @@ class CustomersController extends Controller
         } else {
             $cpfIsRegistered = false;
         }
+
         return response()->json(['cpfIsRegistered' => $cpfIsRegistered]);
         //dd($customer);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'cpf' => 'required',
+            'password' => 'required'
+        ]);
+
+        $customer = Customers::where('cpf', $request->cpf)->first();
+
+        if (!$customer || !Hash::check($request->password, $customer->password)) {
+            return response()->json([
+                'error' => 'The provided credentials are incorrect.'
+            ], 401);
+        }
+
+        return response()->json([
+            'bearer_token' => $customer->createToken($request->cpf)->plainTextToken
+        ]);
     }
 
     /**
