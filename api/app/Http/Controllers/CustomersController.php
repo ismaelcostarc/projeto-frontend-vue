@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendents;
 use App\Models\Customers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +32,7 @@ class CustomersController extends Controller
         //Autorização
         //Caso o usuário autenticado seja um atendente, o index() retorna todos os clientes;
         //Caso o usuário seja um cliente, index retorna apenas os dados dele
-        $model = Auth::user()::class;
-
+        $model = get_class(Auth::user());
         //Cliente
         if ($model == Customers::class) {
             $customer = Customers::find(Auth::user()->id);
@@ -84,7 +84,7 @@ class CustomersController extends Controller
     {
         //Autorização
         //Apenas atendentes podem ver dados de um cliente em específico
-        $model = Auth::user()::class;
+        $model = get_class(Auth::user());
 
         if ($model == Customers::class)
             return response()->json([], 401);
@@ -100,6 +100,13 @@ class CustomersController extends Controller
 
     public function update(Request $request, $id)
     {
+        //Autorização
+        //Apenas atendentes podem atualizar dados de um cliente em específico
+        $model = get_class(Auth::user());
+
+        if ($model == Customers::class)
+            return response()->json([], 401);
+
         //Validações
         $request->validate([
             'cpf' => 'size:11',
@@ -130,6 +137,13 @@ class CustomersController extends Controller
 
     public function destroy($id)
     {
+        //Autorização
+        //Apenas atendentes podem excluir um cliente em específico
+        $model = get_class(Auth::user());
+
+        if ($model == Customers::class)
+            return response()->json([], 401);
+
         $customer = Customers::find($id);
 
         if (!$customer) {
@@ -137,6 +151,51 @@ class CustomersController extends Controller
                 'message'   => 'Record not found',
             ], 404);
         }
+
+        $customer->delete();
+    }
+
+    public function updateSelf(Request $request)
+    {
+        //Autorização
+        //Apenas clientes podem atualizar seus próprios dados
+        $model = get_class(Auth::user());
+
+        if ($model == Attendents::class)
+            return response()->json([], 401);
+
+        //Validações
+        $request->validate([
+            'cpf' => 'size:11',
+            'password' => 'max:128',
+            'name' => 'max:200',
+            'email' => 'max:200',
+            'phone' => 'max:20',
+            'birthday' => 'date',
+            'zipcode' => 'size:10',
+            'state' => 'size:2',
+            'city' => 'max:20',
+            'attendent_id' => 'prohibited'
+        ]);
+
+        $customer = Customers::find(Auth::user()->id);
+
+        $customer->fill($request->all());
+        $customer->save();
+
+        return response()->json($customer);
+    }
+
+    public function destroySelf()
+    {
+        //Autorização
+        //Apenas clientes podem excluir a si mesmos
+        $model = get_class(Auth::user());
+
+        if ($model == Attendents::class)
+            return response()->json([], 401);
+
+        $customer = Customers::find(Auth::user()->id);
 
         $customer->delete();
     }

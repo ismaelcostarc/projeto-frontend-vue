@@ -50,9 +50,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         //Clientes só podem acessar seu recurso
         //U
-        Route::patch('/', CustomersController::class . '@update')->name('update');
+        Route::patch('/', CustomersController::class . '@updateSelf')->name('update.self');
         //D
-        Route::delete('/', CustomersController::class . '@destroy')->name('destroy');
+        Route::delete('/', CustomersController::class . '@destroySelf')->name('destroy.self');
         /***************************************************************************************/ 
     });
     //Rotas para agendamentos
