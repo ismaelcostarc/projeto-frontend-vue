@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendentsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\SchedulingsController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,12 +27,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Ações que não requerem autorização
 Route::get('/', CustomersController::class . '@check')->name('check');
 
-Route::post('/attendents/login', AttendentsController::class . '@login')->name('attendents.login');
-Route::prefix('/customers')->name('customers.')->group(function () {
-    Route::post('/login', CustomersController::class . '@login')->name('login');
-    //C
-    Route::post('/', CustomersController::class . '@store')->name('store');
-});
+Route::post('/login', AuthController::class . '@login')->name('login');
+Route::post('/customers', CustomersController::class . '@store')->name('customers.store');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Rotas para atendentes
