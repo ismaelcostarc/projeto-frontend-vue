@@ -47,32 +47,6 @@ class SchedulingsController extends Controller
         return response()->json($scheduling);
     }
 
-    //U
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'date' => 'date_format:Y-m-d',
-            'hour' => 'size:8',
-            'health_insurance' => 'max:200',
-            'place' => 'max:200',
-            'exam' => 'max:200',
-            'customer_id' => 'prohibited'
-        ]);
-
-        $scheduling = Schedulings::find($id);
-
-        if(!$scheduling) {
-            return response()->json([
-                'message'   => 'Record not found',
-            ], 404);
-        }
-
-        $scheduling->fill($request->all());
-        $scheduling->save();
-
-        return response()->json($scheduling);
-    }
-
     public function destroy($id)
     {
         $scheduling = Schedulings::find($id);
