@@ -53,7 +53,11 @@ class CustomersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $customer = new Customers();
+        //Observacao: o cpf já precisa vir como string
+        $customer->fill($request->all());
+        $customer->save();
+        return response()->json($customer, 201);
     }
 
     /**

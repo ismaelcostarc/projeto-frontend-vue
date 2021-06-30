@@ -18,6 +18,7 @@ class CustomerSeeder extends Seeder
             'cpf' => '87318186094',
             'name' => 'João Luíz da Silva',
             'password' => bcrypt('123456'),
+            'email' => 'joao@gmail.com',
             'phone' => '8699844556677',
             'birthday' => '1990-03-04',
             'zipcode' => '64000000',

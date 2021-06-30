@@ -26,22 +26,42 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Ações que não requerem autorização
 Route::get('/', CustomersController::class . '@check')->name('check');
 
-Route::post('/attendants/login', AttendentsController::class . '@login')->name('attendants.login');
+Route::post('/attendents/login', AttendentsController::class . '@login')->name('attendents.login');
 Route::prefix('/customers')->name('customers.')->group(function () {
     Route::post('/login', CustomersController::class . '@login')->name('login');
-    Route::post('/register', CustomersController::class . '@register')->name('register');
+    //C
+    Route::post('/', CustomersController::class . '@store')->name('store');
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Rotas para atendentes
-    Route::get('/attendants/{attendant}', AttendentsController::class . '@show')->name('attendentes.show');
+    //R
+    Route::get('/attendents/{attendent}', AttendentsController::class . '@show')->name('attendents.show');
 
     //Rotas para clientes
-    Route::resource('/customers', CustomersController::class);
+    Route::prefix('/customers')->name('customers.')->group(function () {
+        Route::get('/', CustomersController::class . '@index')->name('index');
+        //R
+        Route::get('/{customer}', CustomersController::class . '@show')->name('show');
+        //U
+        Route::patch('/{customer}', CustomersController::class . '@update')->name('update');
+        //D
+        Route::delete('/{customer}', CustomersController::class . '@destroy')->name('destroy');
+    });
     //Rotas para agendamentos
-    Route::resource('/schedulings', SchedulingsController::class);
+    Route::prefix('/schedulings')->name('schedulings.')->group(function () {
+        Route::get('/', SchedulingsController::class . '@index')->name('index');
+        //C
+        Route::post('/', SchedulingsController::class . '@store')->name('store');
+        //R
+        Route::get('/{scheduling}', SchedulingsController::class . '@show')->name('show');
+        //U
+        Route::patch('/{scheduling}', SchedulingsController::class . '@update')->name('update');
+        //D
+        Route::delete('/{scheduling}', SchedulingsController::class . '@destroy')->name('destroy');
+    });
 
     //logout
-    Route::post('/attendant/logout', AttendentsController::class . '@logout');
-    Route::post('/customers/logout', CustomersController::class . '@logout');
+    Route::post('/attendent/logout', AttendentsController::class . '@logout')->name('attendents.logout');
+    Route::post('/customers/logout', CustomersController::class . '@logout')->name('customers.logout');
 });

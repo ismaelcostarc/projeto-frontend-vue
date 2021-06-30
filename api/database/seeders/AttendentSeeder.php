@@ -15,8 +15,8 @@ class AttendentSeeder extends Seeder
     public function run()
     {
         DB::table('attendents')->insert([
-            'cpf' => '87318186094',
-            'name' => 'João Luíz da Silva',
+            'cpf' => '98323485794',
+            'name' => 'Maria lima',
             'password' => bcrypt('123456')
         ]);
     }
