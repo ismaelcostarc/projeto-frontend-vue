@@ -8,6 +8,24 @@ use Illuminate\Http\Request;
 class CustomersController extends Controller
 {
     /**
+     * Checa se o cliente existe a partir do CPF
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function check(Request $request)
+    {
+        $cpf = $request->query('cpf');
+        $customer = Customers::where('cpf', $cpf)->get()->count();
+        if($customer) {
+            $cpfIsRegistered = true;
+        } else {
+            $cpfIsRegistered = false;
+        }
+        return response()->json(['cpfIsRegistered' => $cpfIsRegistered]);
+        //dd($customer);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
