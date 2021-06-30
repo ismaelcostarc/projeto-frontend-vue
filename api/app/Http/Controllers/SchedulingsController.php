@@ -7,79 +7,82 @@ use Illuminate\Http\Request;
 
 class SchedulingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $scheduling = Schedulings::all();
+        if($scheduling->count() == 0) {
+            return response()->json([], 204);
+        }
+        return response()->json($scheduling);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //C
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+            'hour' => 'required',
+            'health_insurance' => 'required|max:200',
+            'place' => 'required|max:200',
+            'exam' => 'required|max:200',
+            'customer_id' => 'required|integer'
+        ]);
+        //dd($request->all());
+
+        $scheduling = new Schedulings();
+        $scheduling->fill($request->all());
+        $scheduling->save();
+        return response()->json($scheduling, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Schedulings  $schedulings
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Schedulings $schedulings)
+    //R
+    public function show($id)
     {
-        //
+        $scheduling = Schedulings::find($id);
+        if(!$scheduling) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
+        return response()->json($scheduling);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Schedulings  $schedulings
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Schedulings $schedulings)
+    //U
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'date' => 'date_format:Y-m-d',
+            'hour' => 'size:8',
+            'health_insurance' => 'max:200',
+            'place' => 'max:200',
+            'exam' => 'max:200',
+            'customer_id' => 'prohibited'
+        ]);
+
+        $scheduling = Schedulings::find($id);
+
+        if(!$scheduling) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
+
+        $scheduling->fill($request->all());
+        $scheduling->save();
+
+        return response()->json($scheduling);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Schedulings  $schedulings
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Schedulings $schedulings)
+    public function destroy($id)
     {
-        //
-    }
+        $scheduling = Schedulings::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Schedulings  $schedulings
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Schedulings $schedulings)
-    {
-        //
+        if(!$scheduling) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
+
+        $scheduling->delete();
     }
 }

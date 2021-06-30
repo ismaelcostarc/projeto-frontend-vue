@@ -26,5 +26,18 @@ class CustomerSeeder extends Seeder
             'city' => 'Teresina',
             'attendent_id' => 1
         ]);
+
+        DB::table('customers')->insert([
+            'cpf' => '32315666066',
+            'name' => 'Francisco Antôonio Ferreira',
+            'password' => bcrypt('123456'),
+            'email' => 'francisco@gmail.com',
+            'phone' => '8699844556677',
+            'birthday' => '1985-03-04',
+            'zipcode' => '64000000',
+            'state' => 'PI',
+            'city' => 'Teresina',
+            'attendent_id' => 1
+        ]);
     }
 }

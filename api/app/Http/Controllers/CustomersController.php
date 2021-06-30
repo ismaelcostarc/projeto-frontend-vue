@@ -16,7 +16,7 @@ class CustomersController extends Controller
     {
         $cpf = $request->query('cpf');
         $customer = Customers::where('cpf', $cpf)->get()->count();
-        if($customer) {
+        if ($customer) {
             $cpfIsRegistered = true;
         } else {
             $cpfIsRegistered = false;
@@ -26,83 +26,99 @@ class CustomersController extends Controller
         //dd($customer);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $customer = Customers::all();
+        if ($customer->count() == 0) {
+            return response()->json([], 204);
+        }
+        return response()->json($customer);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $customer = new Customers();
-        //Observacao: o cpf já precisa vir como string
+        //Validações
+        $request->validate([
+            'cpf' => 'required|size:11',
+            'password' => 'required|max:128',
+            'name' => 'required|max:200',
+            'email' => 'required|max:200',
+            'phone' => 'required|max:20',
+            'birthday' => 'required|date_format:Y-m-d',
+            'zipcode' => 'size:10',
+            'state' => 'size:2',
+            'city' => 'max:20',
+            'attendent_id' => 'integer'
+        ]);
+
+        $customer = Customers::create([
+            'cpf' => $request->cpf,
+            'password' => bcrypt($request->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'birthday' => $request->birthday,
+            'zipcode' => $request->zipcode,
+            'state' => $request->state,
+            'city' => $request->city,
+            'attendent_id' => $request->attendent_id
+        ]);
+        return response()->json([
+            'bearer_token' => $customer->createToken($request->cpf)->plainTextToken
+        ], 201);
+    }
+
+    public function show($id)
+    {
+        $customer = Customers::find($id);
+        if (!$customer) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
+        return response()->json($customer);
+    }
+
+    public function update(Request $request, $id)
+    {
+        //Validações
+        $request->validate([
+            'cpf' => 'size:11',
+            'password' => 'max:128',
+            'name' => 'max:200',
+            'email' => 'max:200',
+            'phone' => 'max:20',
+            'birthday' => 'date',
+            'zipcode' => 'size:10',
+            'state' => 'size:2',
+            'city' => 'max:20',
+            'attendent_id' => 'prohibited'
+        ]);
+
+        $customer = Customers::find($id);
+
+        if (!$customer) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
+
         $customer->fill($request->all());
         $customer->save();
-        return response()->json($customer, 201);
+
+        return response()->json($customer);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customers  $customers
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customers $customers)
+    public function destroy($id)
     {
-        //
-    }
+        $customer = Customers::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customers  $customers
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customers $customers)
-    {
-        //
-    }
+        if (!$customer) {
+            return response()->json([
+                'message'   => 'Record not found',
+            ], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customers  $customers
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Customers $customers)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Customers  $customers
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Customers $customers)
-    {
-        //
+        $customer->delete();
     }
 }

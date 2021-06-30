@@ -18,8 +18,11 @@ class Schedulings extends Model
     protected $fillable = [
         'date',
         'time',
-        'health_insurence',
-        'place'
+        'hour',
+        'health_insurance',
+        'place',
+        'exam',
+        'customer_id'
     ];
 
     public function customer() {

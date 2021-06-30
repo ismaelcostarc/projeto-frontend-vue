@@ -17,8 +17,9 @@ class CreateSchedulingsTable extends Migration
             $table->id();
             $table->date('date')->nullable(false);
             $table->time('hour')->nullable(false);
-            $table->string('health_insurence')->nullable(false);
+            $table->string('health_insurance')->nullable(false);
             $table->string('place')->nullable(false);
+            $table->string('exam')->nullable(false);
             $table->foreignId('customer_id')
                 ->unsigned();
             $table->foreign('customer_id')

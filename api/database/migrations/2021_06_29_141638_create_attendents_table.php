@@ -17,7 +17,7 @@ class CreateAttendentsTable extends Migration
             $table->id();
             $table->string('cpf')->nullable(false)->unique();
             $table->string('name', 200)->nullable(false);
-            $table->string('password', 191)->nullable(false);
+            $table->string('password', 128)->nullable(false);
             $table->softDeletes();
             $table->timestamps();
         });

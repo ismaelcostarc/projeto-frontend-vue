@@ -33,17 +33,24 @@ Route::post('/customers', CustomersController::class . '@store')->name('customer
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Rotas para atendentes
     //R
-    Route::get('/attendents/{attendent}', AttendentsController::class . '@show')->name('attendents.show');
+    Route::get('/attendents/{id}', AttendentsController::class . '@show')->name('attendents.show');
 
     //Rotas para clientes
     Route::prefix('/customers')->name('customers.')->group(function () {
+        //Atendentes podem acessar qualquer recurso
         Route::get('/', CustomersController::class . '@index')->name('index');
         //R
-        Route::get('/{customer}', CustomersController::class . '@show')->name('show');
+        Route::get('/{id}', CustomersController::class . '@show')->name('show');
         //U
-        Route::patch('/{customer}', CustomersController::class . '@update')->name('update');
+        Route::patch('/{id}', CustomersController::class . '@update')->name('update');
         //D
-        Route::delete('/{customer}', CustomersController::class . '@destroy')->name('destroy');
+        Route::delete('/{id}', CustomersController::class . '@destroy')->name('destroy');
+
+        //Clientes só podem acessar seu recurso
+        //U
+        Route::patch('/', CustomersController::class . '@update')->name('update');
+        //D
+        Route::delete('/', CustomersController::class . '@destroy')->name('destroy');
     });
     //Rotas para agendamentos
     Route::prefix('/schedulings')->name('schedulings.')->group(function () {
@@ -51,14 +58,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         //C
         Route::post('/', SchedulingsController::class . '@store')->name('store');
         //R
-        Route::get('/{scheduling}', SchedulingsController::class . '@show')->name('show');
+        Route::get('/{id}', SchedulingsController::class . '@show')->name('show');
         //U
-        Route::patch('/{scheduling}', SchedulingsController::class . '@update')->name('update');
+        Route::patch('/{id}', SchedulingsController::class . '@update')->name('update');
         //D
-        Route::delete('/{scheduling}', SchedulingsController::class . '@destroy')->name('destroy');
+        Route::delete('/{id}', SchedulingsController::class . '@destroy')->name('destroy');
     });
 
     //logout
-    Route::post('/attendent/logout', AttendentsController::class . '@logout')->name('attendents.logout');
-    Route::post('/customers/logout', CustomersController::class . '@logout')->name('customers.logout');
+    Route::post('/logout', AuthController::class . '@logout')->name('logout');
 });

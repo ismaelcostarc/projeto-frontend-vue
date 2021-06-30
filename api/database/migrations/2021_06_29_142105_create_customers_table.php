@@ -17,10 +17,10 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('cpf')->nullable(false)->unique();
             $table->string('name', 200)->nullable(false);
-            $table->string('password', 191)->nullable(false);
+            $table->string('password', 128)->nullable(false);
             $table->string('email', 200)->nullable(false);
             $table->string('phone', 20)->nullable(false);
-            $table->date('birthday')->nullable();
+            $table->date('birthday')->nullable(false);
             $table->string('zipcode', 10)->nullable();
             $table->string('state', 2)->nullable();
             $table->string('city', 20)->nullable();

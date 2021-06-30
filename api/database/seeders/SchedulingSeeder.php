@@ -17,8 +17,9 @@ class SchedulingSeeder extends Seeder
         DB::table('schedulings')->insert([
             'date' => '2021-08-04',
             'hour' => '08:00:00',
-            'health_insurence' => 'IAPEP',
+            'health_insurance' => 'IAPEP',
             'place' => 'Unimed',
+            'exam' => 'Hemograma',
             'customer_id' => 1
         ]);
     }

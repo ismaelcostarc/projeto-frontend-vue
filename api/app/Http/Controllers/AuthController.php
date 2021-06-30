@@ -20,20 +20,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'cpf' => 'required',
+            'cpf' => 'required|size:11',
             'password' => 'required',
-            'profile' => 'required'
+            'profile' => 'required|integer|between:1,2'
         ]);
 
         if ($request->profile == 1) {
             $user = Customers::where('cpf', $request->cpf)->first();
-        } elseif($request->profile == 2) {
-            $user = Attendents::where('cpf', $request->cpf)->first();
         } else {
-            //Prevenção de erros
-            return response()->json([
-                'error' => 'The profile is incorrect.'
-            ], 400);
+            $user = Attendents::where('cpf', $request->cpf)->first();
         }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -44,6 +39,14 @@ class AuthController extends Controller
 
         return response()->json([
             'bearer_token' => $user->createToken($request->cpf)->plainTextToken
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Tokens Revoked'
         ]);
     }
 }
