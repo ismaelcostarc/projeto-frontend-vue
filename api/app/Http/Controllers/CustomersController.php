@@ -27,20 +27,19 @@ class CustomersController extends Controller
         return response()->json(['cpfIsRegistered' => $cpfIsRegistered]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //Autorização
-        //Caso o usuário autenticado seja um atendente, o index() retorna todos os clientes;
-        //Caso o usuário seja um cliente, index retorna apenas os dados dele
+        //Apenas Atendentes podem visualizar páginas de clientes
         $model = get_class(Auth::user());
-        //Cliente
+        //Clientes podem visualizar apenas seus próprios dados
         if ($model == Customers::class) {
             $customer = Customers::find(Auth::user()->id);
             return response()->json($customer);
         }
 
         //Atendente
-        $customers = Customers::all();
+        $customers = Customers::paginate($request->query('pageSize'));
         if ($customers->count() == 0) {
             return response()->json([], 204);
         }

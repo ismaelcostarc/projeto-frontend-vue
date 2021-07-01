@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendents;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendentsController extends Controller
 {
-    public function show($id)
+    public function show()
     {
-        $attendent = Attendents::find($id);
-        if (!$attendent) {
-            return response()->json([
-                'message'   => 'Record not found',
-            ], 404);
-        }
+        //Autorização
+        //Apenas atendentes podem atualizar seus próprios dados
+        $model = get_class(Auth::user());
+
+        if ($model != Attendents::class)
+            return response()->json([], 401);
+        $attendent = Attendents::find(Auth::user()->id);
         return response()->json($attendent);
     }
 }

@@ -14,6 +14,7 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
+        /*
         DB::table('customers')->insert([
             'cpf' => '87318186094',
             'name' => 'João Luíz da Silva',
@@ -39,5 +40,9 @@ class CustomerSeeder extends Seeder
             'city' => 'Teresina',
             'attendent_id' => 1
         ]);
+        */
+        \App\Models\Customers::factory()
+            ->count(10)
+            ->create();
     }
 }

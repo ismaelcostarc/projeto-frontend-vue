@@ -33,16 +33,16 @@ Route::post('/customers', CustomersController::class . '@store')->name('customer
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //Rotas para atendentes
     //R
-    Route::get('/attendents/{id}', AttendentsController::class . '@show')->name('attendents.show');
+    Route::get('/attendents', AttendentsController::class . '@show')->name('attendents.show');
 
     //Rotas para clientes
     Route::prefix('/customers')->name('customers.')->group(function () {
         //Atendentes podem acessar qualquer recurso
+        //Atendentes passam como parâmetro na query string o tamanho da página
         Route::get('/', CustomersController::class . '@index')->name('index');
         //R
         Route::get('/{id}', CustomersController::class . '@show')->name('show');
 
-        /*************************** AUTORIZAÇÃO NÃO FEITA AINDA *****************************/
         //U
         Route::patch('/{id}', CustomersController::class . '@update')->name('update');
         //D
@@ -53,7 +53,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::patch('/', CustomersController::class . '@updateSelf')->name('update.self');
         //D
         Route::delete('/', CustomersController::class . '@destroySelf')->name('destroy.self');
-        /***************************************************************************************/ 
     });
     //Rotas para agendamentos
     Route::prefix('/schedulings')->name('schedulings.')->group(function () {
