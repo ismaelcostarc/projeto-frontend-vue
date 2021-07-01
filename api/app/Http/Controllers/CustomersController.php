@@ -47,12 +47,12 @@ class CustomersController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         //Validações
         $request->validate([
             'cpf' => 'required|size:11',
             'password' => 'required|max:128',
-            'name' => 'required|max:200',
+            'name' => 'required|max:200',     
             'email' => 'required|max:200',
             'phone' => 'required|max:20',
             'birthday' => 'required|date_format:Y-m-d',
