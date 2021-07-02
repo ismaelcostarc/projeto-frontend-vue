@@ -36,6 +36,8 @@
 </template>
 <script>
 import Customers from "../services/customers.js";
+import cpfIsValid from "../assets/cpfIsValid.js";
+import "../assets/toast.js";
 
 export default {
   name: "LoginCustomer",
@@ -48,14 +50,28 @@ export default {
   methods: {
     async login() {
       const formattedCPF = this.cpf.replaceAll(".", "").replace("-", "");
-      try {
-        const response = await Customers.login(formattedCPF, this.password);
-        const token = response.data.bearer_token;
-        this.$store.commit("setToken", token);
-        this.$store.commit("setProfile", 1);
-        this.$router.push("/customers/home");
-      } catch (error) {
-        console.error(error);
+      if (cpfIsValid(formattedCPF)) {
+        try {
+          const response = await Customers.login(formattedCPF, this.password);
+          const token = response.data.bearer_token;
+          this.$store.commit("setToken", token);
+          this.$store.commit("setProfile", 1);
+          this.$router.push("/customers/home");
+        } catch (error) {
+          if (error.response == undefined) {
+            this.$toasted.global.toastedError(
+              "Ocorreu um erro em nosso servidor, por favor tente novamente"
+            );
+          } else {
+            if (error.response.status == 401) {
+              this.$toasted.global.toastedError(
+                "O usuário com o CPF e senha informados não existe"
+              );
+            }
+          }
+        }
+      } else {
+        this.$toasted.global.toastedError("Insira um CPF válido.");
       }
     },
   },

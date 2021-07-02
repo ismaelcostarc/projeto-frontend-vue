@@ -91,7 +91,11 @@ export default {
         this.state = dataCEP.data.uf;
         this.city = dataCEP.data.localidade;
       } catch (error) {
-        console.error(error);
+        if (error.response == undefined) {
+          this.$toasted.global.toastedError(
+            "O usuário com o CPF e senha informados não existe"
+          );
+        }
       }
     },
     signUp() {

@@ -103,6 +103,13 @@ export default {
       phone: "",
     };
   },
+  beforeRouteEnter(to, from, next) {
+    if(from.name !== 'CPFChecking' || from.name) {
+      next({name: 'LoginCustomer'});
+    } else {
+      next();
+    }
+  },
   methods: {
     validatePassword() {
       if (this.password.length < 6) {

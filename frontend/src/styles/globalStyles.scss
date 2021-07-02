@@ -40,6 +40,10 @@ html {
   font-weight: 500;
 }
 
+.link-titles:link {
+  text-decoration: none;
+}
+
 .toast-error {
   background-color: $warning !important;
 }
