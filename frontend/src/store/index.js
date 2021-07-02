@@ -5,8 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    newCustomer: {
+      cpf: ""
+    }
   },
   mutations: {
+    setCPF(state, newCPF) {
+      state.newCustomer.cpf = newCPF;
+    }
   },
   actions: {
   },

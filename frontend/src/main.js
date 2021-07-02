@@ -3,12 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-Vue.config.productionTip = false
-
 import VueTheMask from 'vue-the-mask'
-Vue.use(VueTheMask)
 
-import Toasted from 'vue-toasted';
+import Toasted from 'vue-toasted'
+
+Vue.config.productionTip = false
+Vue.use(VueTheMask)
 Vue.use(Toasted)
 
 new Vue({

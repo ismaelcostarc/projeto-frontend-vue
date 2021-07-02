@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<script>
+export default {
+	
+}
+</script>
+
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto:wght@300;400&display=swap");
 @import "./styles/variables.scss";
@@ -146,6 +152,8 @@ h1 {
   font-weight: 300;
 }
 
+//Para remover o placeholder de date
+
 //**********************************************
 //Fontes
 html {
@@ -194,10 +202,8 @@ html {
   align-items: center;
   //min-width: 20vw;
 
-  * {
-    &:not(:first-child) {
-      margin-top: 2em;
-    }
+  & > :not(:first-child) {
+    margin-top: 2em;
   }
 }
 
@@ -208,7 +214,7 @@ html {
 
   * {
     &:not(:first-child) {
-      margin-top: 1.3em;
+      margin-top: 0.7em;
     }
   }
 
@@ -231,12 +237,20 @@ html {
   border-radius: $border-radius-input-login;
   border-style: solid;
   border-width: 1px;
+  border-color: $grey-light;
   padding: 0.7em;
   min-width: 15em;
 
   &:focus {
     outline: none;
   }
+}
+
+.select-login {
+  background-color: #fff;
+  min-width: 100%;
+  font-family: 'Poppins', sans-serif;
+  color: $grey-light;
 }
 
 .input-system {

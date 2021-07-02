@@ -1,9 +1,9 @@
 
-import { https } from './service'
+import { https } from './backend.js'
 
 export default {
   check: cpf => {
-    return https.get(`?cpf=${cpf}`);
+    return https.get(`?cpf=${cpf}`)
   },
 
   list: (cpf) => {
