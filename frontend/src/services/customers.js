@@ -2,27 +2,36 @@
 import { https } from './backend.js'
 
 export default {
-  check: cpf => {
+  check(cpf) {
     return https.get(`?cpf=${cpf}`)
   },
-
-  list: (cpf) => {
-    return https.get(`customers/searchcpf/${cpf}`)
-  },
-
-  create: (customer) => {
-    return https.post('customer', customer, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  },
-
-  createDependent: (customer) => {
-    return https.post('customer', customer, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+  login(cpf, password) {
+    return https.post('login', {
+      cpf: cpf,
+      password: password,
+      //O perfil de cliente é 1 e o de atendente é 2
+      profile: 1
     })
   }
+  /*
+    list: (cpf) => {
+      return https.get(`customers/searchcpf/${cpf}`)
+    },
+  
+    create: (customer) => {
+      return https.post('customer', customer, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    },
+  
+    createDependent: (customer) => {
+      return https.post('customer', customer, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    }
+    */
 }

@@ -15,8 +15,8 @@ class AuthController extends Controller
 {
     //A action de login é a mesma independente se for cliente ou atendente,
     //porém deve ser enviado um campo no body contendo o profile desejado
-    //1 - Atendente
-    //2 - Cliente
+    //1 - Cliente
+    //2 - Atendente
     public function login(Request $request)
     {
         $request->validate([

@@ -7,6 +7,10 @@ Vue.use(Vuex)
 //eles serão formatados somente antes de serem enviados para a API
 export default new Vuex.Store({
   state: {
+    authenticatedUser: {
+      token: '',
+      profile: 0
+    },
     newCustomer: {
       cpf: "",
       password: "",
@@ -17,9 +21,15 @@ export default new Vuex.Store({
       cep: null,
       state: null,
       city: null
-    }
+    },
   },
   mutations: {
+    setToken(state, newToken) {
+      state.authenticatedUser.token = newToken;
+    },
+    setProfile(state, profile) {
+      state.authenticatedUser.profile = profile;
+    },
     setCPF(state, newCPF) {
       state.newCustomer.cpf = newCPF;
     },

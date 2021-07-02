@@ -1,17 +1,18 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../views/Login.vue';
+import LoginCustomer from '../views/LoginCustomer.vue';
 import CPFChecking from '../views/CPFChecking.vue';
 import SignUpStep1 from '../views/SignUpStep1.vue';
 import SignUpStep2 from '../views/SignUpStep2.vue';
+import CustomersHome from '../views/CustomersHome.vue';
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Login',
-    component: Login
+    name: 'LoginCustomer',
+    component: LoginCustomer
   },
   {
     path: '/cpf-checking',
@@ -27,7 +28,12 @@ const routes = [
     path: '/sign-up-step-2',
     name: 'SignUpStep2',
     component: SignUpStep2
-  }
+  },
+  {
+    path: '/customers/home',
+    name: 'CustomersHome',
+    component: CustomersHome
+  },
 ]
 
 const router = new VueRouter({
