@@ -12,6 +12,13 @@ export default {
       //O perfil de cliente é 1 e o de atendente é 2
       profile: 1
     })
+  },
+  index(token) {
+    return https.get('/customers', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
   }
   /*
     list: (cpf) => {
