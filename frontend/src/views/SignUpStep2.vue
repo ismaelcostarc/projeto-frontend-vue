@@ -86,8 +86,8 @@ export default {
   methods: {
     async consultCEP() {
       try {
+        //Consulta à API de ceps
         const dataCEP = await consultCEP(this.cep);
-        console.log(dataCEP);
         this.state = dataCEP.data.uf;
         this.city = dataCEP.data.localidade;
       } catch (error) {

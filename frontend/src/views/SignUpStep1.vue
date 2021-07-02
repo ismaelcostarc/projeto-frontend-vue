@@ -124,15 +124,22 @@ export default {
     },
     signUpStep2() {
       //Armazena o estado e vai para o passo 2
+      this.$store.commit("setPassword", this.password);
+      this.$store.commit("setName", this.name);
+      this.$store.commit("setEmail", this.email);
+      this.$store.commit("setBirthday", this.birthday);
+      this.$store.commit("setPhone", this.phone);
+
       this.$router.push("/sign-up-step-2");
     },
   },
   created() {
+    //As informações são recuperadas
     this.name = this.$store.state.newCustomer.name;
     this.email = this.$store.state.newCustomer.email;
     this.birthday = this.$store.state.newCustomer.birthday;
     this.phone = this.$store.state.newCustomer.phone;
-}
+  },
 };
 </script>
 <style scoped lang="scss">
