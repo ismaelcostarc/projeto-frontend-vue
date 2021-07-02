@@ -70,7 +70,7 @@
           required
         />
 
-        <button type="submit" class="button">Próximo</button>
+        <button type="submit" class="button button-default">Próximo</button>
       </form>
 
       <footer class="group-link">
@@ -80,7 +80,6 @@
   </div>
 </template>
 <script>
-import Customers from "../services/customers.js";
 import GoBackButton from "../components/GoBackButton.vue";
 import "../assets/toast.js";
 

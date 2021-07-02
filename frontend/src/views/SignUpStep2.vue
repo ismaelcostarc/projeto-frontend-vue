@@ -56,7 +56,7 @@
           required
         />
 
-        <button type="submit" class="button">Cadastrar</button>
+        <button type="submit" class="button button-default">Cadastrar</button>
       </form>
 
       <footer class="group-link">
@@ -66,7 +66,7 @@
   </div>
 </template>
 <script>
-import Customers from "../services/customers.js";
+import customers from "../services/customers.js";
 import GoBackButton from "../components/GoBackButton.vue";
 import { consultCEP } from "../services/viaCEP.js";
 import "../assets/toast.js";

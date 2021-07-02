@@ -22,7 +22,7 @@
           v-model="password"
           required
         />
-        <button type="submit" class="button">Entrar</button>
+        <button type="submit" class="button button-default">Entrar</button>
       </form>
 
       <footer class="group-link">
@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-import Customers from "../services/customers.js";
+import customers from "../services/customers.js";
 import cpfIsValid from "../assets/cpfIsValid.js";
 import "../assets/toast.js";
 
@@ -52,7 +52,7 @@ export default {
       const formattedCPF = this.cpf.replaceAll(".", "").replace("-", "");
       if (cpfIsValid(formattedCPF)) {
         try {
-          const response = await Customers.login(formattedCPF, this.password);
+          const response = await customers.login(formattedCPF, this.password);
           const token = response.data.bearer_token;
           this.$store.commit("setToken", token);
           this.$store.commit("setProfile", 1);

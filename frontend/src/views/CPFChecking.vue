@@ -17,7 +17,7 @@
           @click="inputBorderColor = '#717171'"
         />
 
-        <button type="submit" class="button">Entrar</button>
+        <button type="submit" class="button button-default">Entrar</button>
       </form>
 
       <footer class="group-link">
@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import Customers from "../services/customers.js";
+import customers from "../services/customers.js";
 import cpfIsValid from "../assets/cpfIsValid.js";
 import "../assets/toast.js";
 
@@ -45,7 +45,7 @@ export default {
       if (cpfIsValid(formattedCPF)) {
         // Tenta conectar com a API, caso não consiga emite um toast de erro
         try {
-          const response = await Customers.check(formattedCPF);
+          const response = await customers.check(formattedCPF);
           if (response.data.cpfIsRegistered === true) {
             this.inputBorderColor = "#FF5E5E";
             this.$toasted.global.toastedError("O CPF já está registrado");

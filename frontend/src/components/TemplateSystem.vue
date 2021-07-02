@@ -2,8 +2,9 @@
   <div>
     <div class="topnav" id="myTopnav">
       <a href="#home" class="active">{{ userName }}</a>
+        <span class="loader" v-if="!userName"></span>
 
-      <a class="button">Sair</a>
+      <a class="button-exit button button-default">Sair</a>
       <router-link to="/" class="link link-titles" v-if="renderPerfil"
         >Perfil</router-link
       >
@@ -13,9 +14,9 @@
       </a>
     </div>
 
-    <main class="container">
+    <div class="main-system">
       <slot></slot>
-    </main>
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +60,7 @@ export default {
 <style scoped lang="scss">
 @import "./../styles/variables.scss";
 
-main {
+.main-system {
   background-color: $bg-color-2;
   box-shadow: inset 0 7px 9px -7px rgba(0, 0, 0, 0.4);
 }
@@ -102,7 +103,7 @@ main {
   color: $primary-color;
 }
 
-.button {
+.button-exit {
   max-height: 20px !important;
 }
 
