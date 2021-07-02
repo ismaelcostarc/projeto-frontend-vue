@@ -1,6 +1,6 @@
 <template>
-  <div class="container bg">
-    <div class="card-login">
+  <div class="container bg screen">
+    <div class="card card-login">
       <header>
         <h1>Seja Bem Vindo!</h1>
       </header>
@@ -56,7 +56,7 @@ export default {
           const token = response.data.bearer_token;
           this.$store.commit("setToken", token);
           this.$store.commit("setProfile", 1);
-          this.$router.push("/customers/home");
+          this.$router.push("/schedulings/list");
         } catch (error) {
           if (error.response == undefined) {
             this.$toasted.global.toastedError(

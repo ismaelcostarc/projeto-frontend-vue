@@ -4,7 +4,7 @@ import LoginCustomer from '../views/LoginCustomer.vue';
 import CPFChecking from '../views/CPFChecking.vue';
 import SignUpStep1 from '../views/SignUpStep1.vue';
 import SignUpStep2 from '../views/SignUpStep2.vue';
-import CustomersHome from '../views/CustomersHome.vue';
+import SchedulingsList from '../views/SchedulingsList.vue';
 import store from '../store/index.js';
 
 Vue.use(VueRouter)
@@ -43,9 +43,9 @@ const routes = [
     },
   },
   {
-    path: '/customers/home',
-    name: 'CustomersHome',
-    component: CustomersHome,
+    path: '/schedulings/list',
+    name: 'SchedulingsList',
+    component: SchedulingsList,
     meta: {
       requiresAuth: true,
     },

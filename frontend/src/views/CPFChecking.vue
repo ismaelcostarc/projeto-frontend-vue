@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg">
+  <div class="container bg screen">
     <div class="card-login">
       <header>
         <h1>Criar conta</h1>
