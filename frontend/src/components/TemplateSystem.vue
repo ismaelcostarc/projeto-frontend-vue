@@ -2,10 +2,15 @@
   <div>
     <div class="topnav" id="myTopnav">
       <a href="#home" class="active">{{ userName }}</a>
-        <span class="loader" v-if="!userName"></span>
+      <span class="loader" v-if="!userName"></span>
 
-      <a class="button-exit button button-default">Sair</a>
-      <router-link to="/" class="link link-titles" v-if="renderPerfil"
+      <router-link
+        to="/"
+        class="button-exit button button-default"
+        @click="logout"
+        >Sair</router-link
+      >
+      <router-link to="/customer/profile" class="link link-titles" v-if="renderPerfil"
         >Perfil</router-link
       >
 
@@ -20,7 +25,8 @@
   </div>
 </template>
 <script>
-import Customers from "../services/customers.js";
+import customers from "../services/customers.js";
+import user from "../services/user.js";
 
 export default {
   name: "TemplateSystem",
@@ -43,8 +49,17 @@ export default {
     async searchName() {
       const token = this.$store.state.authenticatedUser.token;
       try {
-        const response = await Customers.index(token);
+        const response = await customers.index(token);
         this.userName = response.data.name;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async logout() {
+      const token = this.$store.state.authenticatedUser.token;
+
+      try {
+        await user.logout(token);
       } catch (error) {
         console.error(error);
       }
@@ -63,6 +78,7 @@ export default {
 .main-system {
   background-color: $bg-color-2;
   box-shadow: inset 0 7px 9px -7px rgba(0, 0, 0, 0.4);
+  min-height: 91vh;
 }
 
 //************* Responsividade ****************

@@ -2,17 +2,20 @@
   <div>
     <template-system>
       <header>
-        <button class="button button-secondary">Agendar Exame</button>
+        <router-link class="button button-secondary" to="/schedule"
+          >Agendar Exame</router-link
+        >
       </header>
       <main>
         <div class="schedulings">
-          <span class="loader" v-if="schedulings != []">Loader</span>
           <div v-for="scheduling in schedulings" :key="scheduling.id">
             <div class="card card-scheduling">
               <h2>{{ scheduling.exam }}</h2>
               <div class="scheduling-data">
-                <div class="text">Dia: {{ scheduling.date }}</div>
-                <div class="text">Horário: {{ scheduling.hour }}</div>
+                <div class="text">
+                  Dia: {{ schedulingDateFormatted(scheduling.date) }}
+                </div>
+                <div class="text">Horário: {{ schedulingHourFormatted(scheduling.hour) }}</div>
                 <div class="text">
                   Convênio: {{ scheduling.health_insurance }}
                 </div>
@@ -25,7 +28,6 @@
             </div>
           </div>
         </div>
-        
       </main>
     </template-system>
   </div>
@@ -37,7 +39,7 @@ import schedulings from "../services/schedulings.js";
 export default {
   name: "SchedulingsList",
   components: {
-    TemplateSystem: TemplateSystem,
+    TemplateSystem,
   },
   data() {
     return {
@@ -54,6 +56,14 @@ export default {
         console.log(error);
       }
     },
+    schedulingDateFormatted(date) {
+      const dateArray = date.split('-');
+      const dateFormatted = `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`
+      return dateFormatted;
+    },
+    schedulingHourFormatted(hour) {
+      return hour.slice(0, 5);
+    }
   },
   created() {
     this.getSchedulings();
@@ -67,10 +77,6 @@ header {
   justify-content: flex-end;
 }
 
-main {
-  min-height: 86vh;
-}
-
 .schedulings {
   height: 100%;
   display: flex;
@@ -80,13 +86,13 @@ main {
 }
 
 .group-button {
-  >:first-child {
+  > :first-child {
     margin-right: 1em;
   }
 }
 
 .scheduling-data {
-  >:not(:last-child) {
+  > :not(:last-child) {
     margin-bottom: 1em;
   }
 }

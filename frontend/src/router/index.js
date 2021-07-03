@@ -5,6 +5,9 @@ import CPFChecking from '../views/CPFChecking.vue';
 import SignUpStep1 from '../views/SignUpStep1.vue';
 import SignUpStep2 from '../views/SignUpStep2.vue';
 import SchedulingsList from '../views/SchedulingsList.vue';
+import Schedule from '../views/Schedule.vue';
+import Profile from '../views/Profile.vue';
+import EditProfile from '../views/EditProfile.vue';
 import store from '../store/index.js';
 
 Vue.use(VueRouter)
@@ -17,6 +20,11 @@ const routes = [
     meta: {
       requiresAuth: false,
     },
+    beforeEnter(to, from, next) {
+      store.commit('setToken', '');
+      store.commit('setProfile', 0);
+      next();
+    }
   },
   {
     path: '/cpf-checking',
@@ -33,6 +41,13 @@ const routes = [
     meta: {
       requiresAuth: false,
     },
+    beforeEnter(to, from, next) {
+      if(from.name !== 'CPFChecking' && from.name !== 'SignUpStep2') {
+        next({name: 'LoginCustomer'});
+      } else {
+        next();
+      }
+    },
   },
   {
     path: '/sign-up-step-2',
@@ -41,11 +56,42 @@ const routes = [
     meta: {
       requiresAuth: false,
     },
+    beforeEnter(to, from, next) {
+      if(from.name !== 'SignUpStep1') {
+        next({name: 'LoginCustomer'});
+      } else {
+        next();
+      }
+    },
   },
   {
     path: '/schedulings/list',
     name: 'SchedulingsList',
     component: SchedulingsList,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/customer/profile',
+    name: 'Profile',
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/customer/profile/edit',
+    name: 'EditProfile',
+    component: EditProfile,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule,
     meta: {
       requiresAuth: true,
     },

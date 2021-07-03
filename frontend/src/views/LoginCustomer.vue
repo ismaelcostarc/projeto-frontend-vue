@@ -36,6 +36,7 @@
 </template>
 <script>
 import customers from "../services/customers.js";
+import user from '../services/user.js';
 import cpfIsValid from "../assets/cpfIsValid.js";
 import "../assets/toast.js";
 
@@ -52,10 +53,21 @@ export default {
       const formattedCPF = this.cpf.replaceAll(".", "").replace("-", "");
       if (cpfIsValid(formattedCPF)) {
         try {
-          const response = await customers.login(formattedCPF, this.password);
+          const response = await user.login(formattedCPF, this.password);
           const token = response.data.bearer_token;
           this.$store.commit("setToken", token);
           this.$store.commit("setProfile", 1);
+
+          this.$store.commit("setCPF", "");
+          this.$store.commit("setPassword", "");
+          this.$store.commit("setName", "");
+          this.$store.commit("setEmail", "");
+          this.$store.commit("setBirthday", "");
+          this.$store.commit("setPhone", "");
+          this.$store.commit("setCEP", "");
+          this.$store.commit("setState", "");
+          this.$store.commit("setCity", "");
+
           this.$router.push("/schedulings/list");
         } catch (error) {
           if (error.response == undefined) {

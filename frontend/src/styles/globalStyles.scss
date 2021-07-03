@@ -12,6 +12,11 @@ h2 {
   font-size: 1.5em;
   font-weight: 300;
 }
+
+h3 {
+  font-size: 1.3em;
+  font-weight: 300;
+}
 //**********************************************
 //Fontes
 html {
@@ -82,6 +87,11 @@ html {
   margin-bottom: 2em;
 }
 
+.card-profile {
+  max-width: 20em;
+  max-height: 20em;
+}
+
 .form-login {
   display: flex;
   flex-direction: column;
@@ -136,6 +146,7 @@ html {
   border-radius: $border-radius-button;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 
   &:hover {
     filter: brightness(0.9);

@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card-login">
+    <div class="card-login card">
       <header>
         <go-back-button />
         <h1>Criar conta</h1>
@@ -115,7 +115,15 @@ export default {
 header {
   display: flex;
   width: 100%;
-  justify-content: space-around;
+  justify-content: center;
+
+  & > :first-child {
+    margin-right: 3em;
+  }
+
+  & > :last-child {
+    margin-right: 2em;
+  }
 }
 
 .warning {

@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card-login">
+    <div class="card-login card">
       <header>
         <h1>Criar conta</h1>
       </header>
@@ -17,7 +17,7 @@
           @click="inputBorderColor = '#717171'"
         />
 
-        <button type="submit" class="button button-default">Entrar</button>
+        <button type="submit" class="button button-default">Próximo</button>
       </form>
 
       <footer class="group-link">
