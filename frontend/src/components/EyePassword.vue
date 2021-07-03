@@ -25,11 +25,11 @@ export default {
   name: "EyePassword",
   props: {
       top: {
-          type: Number,
+          type: String,
           required: true
       },
       left: {
-          type: Number,
+          type: String,
           required: true
       }
   },

@@ -10,7 +10,7 @@
               <span class="material-icons trash"> delete </span>
             </router-link>
           </div>
-          <form class="edit-profile-form">
+          <form class="edit-profile-form" @submit.prevent="update()">
             <div class="row">
               <div class="column">
                 <div class="label">Nome<span>: *</span></div>
@@ -20,6 +20,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
 
               <div class="column">
@@ -30,6 +31,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
             </div>
             <div class="row">
@@ -41,6 +43,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
 
               <div class="column">
@@ -50,8 +53,16 @@
                   v-model="customer.cpf"
                   v-mask="'###.###.###-##'"
                   class="input input-system text"
+                  :style="{ 'border-color': inputCPFBorderColor }"
+                  @blur="checkCPF()"
                   required
                 />
+                <div
+                  class="warning"
+                  :style="{ visibility: warningValidCPFVisibility }"
+                >
+                  Insira um CPF válido
+                </div>
               </div>
             </div>
             <div class="row">
@@ -64,6 +75,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
 
               <div class="column">
@@ -75,6 +87,7 @@
                   v-mask="'#####-###'"
                   required
                 />
+                <div class="warning">.</div>
               </div>
             </div>
             <div class="row">
@@ -86,6 +99,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
 
               <div class="column">
@@ -96,6 +110,7 @@
                   class="input input-system text"
                   required
                 />
+                <div class="warning">.</div>
               </div>
             </div>
             <div class="row">
@@ -164,6 +179,7 @@
 import TemplateSystem from "../components/TemplateSystem.vue";
 import GoBackButton from "../components/GoBackButton.vue";
 import EyePassword from "../components/EyePassword.vue";
+import cpfIsValid from "../assets/cpfIsValid.js";
 import customers from "../services/customers.js";
 import attendent from "../services/attendent.js";
 
@@ -175,6 +191,8 @@ export default {
       customer: {},
       attendentName: "",
       newPassword: "",
+      inputCPFBorderColor: "#717171",
+      warningValidCPFVisibility: "hidden",
       inputPasswordBorderColor: "#717171",
       warningPasswordLengthVisibility: "hidden",
       newPasswordRepeated: "",
@@ -208,6 +226,16 @@ export default {
         console.error(error);
       }
     },
+    checkCPF() {
+      const formattedCPF = this.customer.cpf.replaceAll('.', '').replace('-', '');
+      if (!cpfIsValid(formattedCPF)) {
+        this.warningValidCPFVisibility = "visible";
+        this.inputCPFBorderColor = "#FF5E5E";
+      } else {
+        this.warningValidCPFVisibility = "hidden";
+        this.inputCPFBorderColor = "#717171";
+      }
+    },
     validatePassword() {
       if (this.newPassword.length < 6) {
         this.warningPasswordLengthVisibility = "visible";
@@ -234,6 +262,9 @@ export default {
       this.typePasswordRepeated =
         this.typePasswordRepeated === "password" ? "text" : "password";
     },
+    async update() {
+
+    }
   },
   created() {
     this.searchCustomer();
@@ -277,9 +308,6 @@ export default {
   align-items: center;
   justify-content: center;
   //justify-content: space-between;
-  &:not(:last-child) {
-    margin-bottom: 1em;
-  }
 }
 
 .column {
@@ -306,6 +334,8 @@ export default {
 
 .warning {
   margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  visibility: hidden;
 }
 
 //******************* Responsividade ****************/
@@ -318,11 +348,6 @@ export default {
 
   .column {
     margin: 0 !important;
-    margin-bottom: 1em !important;
-  }
-
-  .row {
-    margin-bottom: 0 !important;
   }
 
   .warning-required-inputs {

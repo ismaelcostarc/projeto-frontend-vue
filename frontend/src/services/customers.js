@@ -10,6 +10,16 @@ export default {
         Authorization: `Bearer ${token}`
       }
     })
+  },
+  update(token, customer) {
+    return https.patch('/customers',
+      customer,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
   }
   /*
     list: (cpf) => {
