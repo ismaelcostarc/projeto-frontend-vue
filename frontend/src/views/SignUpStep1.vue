@@ -7,28 +7,36 @@
       </header>
 
       <form class="form-login" @submit.prevent="signUpStep2">
-        <input
-          type="password"
-          placeholder="Escolha uma senha"
-          class="input input-login text"
-          v-model="password"
-          @blur="validatePassword"
-          :style="{ 'border-color': inputPasswordBorderColor }"
-          required
-        />
+        <eye-password @swap="swapPasswordVisibility()" top="15px" left="255px">
+          <input
+            :type="typePassword"
+            placeholder="Escolha uma senha"
+            class="input input-login text"
+            v-model="password"
+            @blur="validatePassword"
+            :style="{ 'border-color': inputPasswordBorderColor }"
+            required
+          />
+        </eye-password>
         <div class="warning" :style="{ display: warningPasswordLengthDisplay }">
           Senhas devem ter no mínimo 6 caracteres
         </div>
 
-        <input
-          type="password"
-          placeholder="Digite novamente a senha"
-          class="input input-login text"
-          v-model="passwordRepeated"
-          @blur="passwordIsEqual"
-          :style="{ 'border-color': inputPasswordRepeatedBorderColor }"
-          required
-        />
+        <eye-password
+          @swap="swapPasswordRepeatedVisibility()"
+          top="15px"
+          left="255px"
+        >
+          <input
+            :type="typePasswordRepeated"
+            placeholder="Digite novamente a senha"
+            class="input input-login text"
+            v-model="passwordRepeated"
+            @blur="passwordIsEqual"
+            :style="{ 'border-color': inputPasswordRepeatedBorderColor }"
+            required
+          />
+        </eye-password>
         <div
           class="warning"
           :style="{ display: warningPasswordIsEqualDisplay }"
@@ -81,12 +89,14 @@
 </template>
 <script>
 import GoBackButton from "../components/GoBackButton.vue";
+import EyePassword from "../components/EyePassword.vue";
 import "../assets/toast.js";
 
 export default {
   name: "SignUpStep1",
   components: {
-    GoBackButton: GoBackButton,
+    GoBackButton,
+    EyePassword,
   },
   data() {
     return {
@@ -96,6 +106,8 @@ export default {
       passwordRepeated: "",
       warningPasswordIsEqualDisplay: "none",
       inputPasswordRepeatedBorderColor: "#717171",
+      typePassword: "password",
+      typePasswordRepeated: "password",
       name: "",
       email: "",
       birthday: "",
@@ -131,6 +143,14 @@ export default {
 
       this.$router.push("/sign-up-step-2");
     },
+    swapPasswordVisibility() {
+      this.typePassword =
+        this.typePassword === "password" ? "text" : "password";
+    },
+    swapPasswordRepeatedVisibility() {
+      this.typePasswordRepeated =
+        this.typePasswordRepeated === "password" ? "text" : "password";
+    },
   },
   created() {
     //As informações são recuperadas
@@ -149,11 +169,11 @@ header {
   width: 100%;
   justify-content: center;
 
-  &>:first-child {
+  & > :first-child {
     margin-right: 3em;
   }
 
-  &>:last-child {
+  & > :last-child {
     margin-right: 2em;
   }
 }

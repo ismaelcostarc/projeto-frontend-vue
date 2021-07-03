@@ -15,13 +15,15 @@
           required
         />
 
-        <input
-          type="password"
-          placeholder="Sua senha"
-          class="input input-login text"
-          v-model="password"
-          required
-        />
+        <eye-password top="15px" left="255px" @swap="swapPasswordVisibility">
+          <input
+            :type="typePassword"
+            placeholder="Sua senha"
+            class="input input-login text"
+            v-model="password"
+            required
+          />
+        </eye-password>
         <button type="submit" class="button button-default">Entrar</button>
       </form>
 
@@ -36,16 +38,19 @@
 </template>
 <script>
 import customers from "../services/customers.js";
-import user from '../services/user.js';
+import user from "../services/user.js";
 import cpfIsValid from "../assets/cpfIsValid.js";
+import EyePassword from "../components/EyePassword.vue";
 import "../assets/toast.js";
 
 export default {
   name: "LoginCustomer",
+  components: { EyePassword },
   data() {
     return {
       cpf: "",
       password: "",
+      typePassword: "password",
     };
   },
   methods: {
@@ -85,6 +90,10 @@ export default {
       } else {
         this.$toasted.global.toastedError("Insira um CPF válido.");
       }
+    },
+    swapPasswordVisibility() {
+      this.typePassword =
+        this.typePassword === "password" ? "text" : "password";
     },
   },
 };

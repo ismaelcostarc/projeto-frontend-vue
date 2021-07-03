@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="topnav" id="myTopnav">
-      <a href="/" class="active">{{ userName }}</a>
+      <a href="/schedulings/list" class="active">{{ userName }}</a>
       <span class="loader" v-if="!userName"></span>
 
       <router-link

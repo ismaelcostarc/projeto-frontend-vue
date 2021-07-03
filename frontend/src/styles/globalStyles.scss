@@ -107,8 +107,8 @@ html {
   flex-direction: column;
   align-items: center;
 
-  * {
-    &:not(:first-child) {
+  & > {
+    *:not(:first-child) {
       margin-top: 0.7em;
     }
   }
@@ -138,14 +138,14 @@ html {
   &:focus {
     outline: none;
   }
-}
 
-.input-login {
+  &-login {
   min-width: 15em;
-}
+  }
 
-.input-system {
+  &-system {
   max-width: 15em;
+  }
 }
 
 .select-login {
@@ -165,26 +165,26 @@ html {
   &:hover {
     filter: brightness(0.9);
   }
-}
 
-.button-default {
-  background-color: $primary-color;
-  color: #fff;
-}
+  &-default {
+    background-color: $primary-color;
+    color: #fff;
+  }
 
-.button-secondary {
-  background-color: #fff;
-  color: $primary-color;
-}
+  &-secondary {
+    background-color: #fff;
+    color: $primary-color;
+  }
 
-.button-warning {
-  background-color: $warning;
-  color: #fff;
-}
+  &-warning {
+    background-color: $warning;
+    color: #fff;
+  }
 
-.button-success {
-  background-color: $success;
-  color: #fff;
+  &-success {
+    background-color: $success;
+    color: #fff;
+  }
 }
 
 .warning {

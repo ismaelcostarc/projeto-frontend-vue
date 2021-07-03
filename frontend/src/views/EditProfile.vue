@@ -100,15 +100,22 @@
             </div>
             <div class="row">
               <div class="column">
-                <div class="label">Nova Senha<span>: *</span></div>
-                <input
-                  type="password"
-                  v-model="newPassword"
-                  class="input input-system text"
-                  placeholder="*******"
-                  @blur="validatePassword"
-                  :style="{ 'border-color': inputPasswordBorderColor }"
-                />
+                <div class="label">Nova Senha<span>:</span></div>
+                <eye-password
+                  @swap="swapPasswordVisibility()"
+                  top="13px"
+                  left="215px"
+                >
+                  <input
+                    :type="typePassword"
+                    v-model="newPassword"
+                    class="input input-system text"
+                    placeholder="******"
+                    @blur="validatePassword"
+                    :style="{ 'border-color': inputPasswordBorderColor }"
+                  />
+                </eye-password>
+
                 <div
                   class="warning"
                   :style="{ visibility: warningPasswordLengthVisibility }"
@@ -118,11 +125,14 @@
               </div>
 
               <div class="column">
-                <div class="label">Repita a nova Senha<span>: *</span></div>
-                <div class="container-icon">
-                  <span class="material-icons eye"> visibility_off </span>
+                <div class="label">Repita a nova senha<span>:</span></div>
+                <eye-password
+                  @swap="swapPasswordRepeatedVisibility()"
+                  top="13px"
+                  left="215px"
+                >
                   <input
-                    type="password"
+                    :type="typePasswordRepeated"
                     v-model="newPasswordRepeated"
                     class="input input-system text"
                     placeholder="*******"
@@ -131,7 +141,7 @@
                       'border-color': inputPasswordRepeatedBorderColor,
                     }"
                   />
-                </div>
+                </eye-password>
                 <div
                   class="warning"
                   :style="{ visibility: warningPasswordIsEqualVisibility }"
@@ -153,11 +163,12 @@
 <script>
 import TemplateSystem from "../components/TemplateSystem.vue";
 import GoBackButton from "../components/GoBackButton.vue";
+import EyePassword from "../components/EyePassword.vue";
 import customers from "../services/customers.js";
 import attendent from "../services/attendent.js";
 
 export default {
-  components: { TemplateSystem, GoBackButton },
+  components: { TemplateSystem, GoBackButton, EyePassword },
   name: "Profile",
   data() {
     return {
@@ -169,6 +180,8 @@ export default {
       newPasswordRepeated: "",
       warningPasswordIsEqualVisibility: "hidden",
       inputPasswordRepeatedBorderColor: "#717171",
+      typePassword: "password",
+      typePasswordRepeated: "password",
     };
   },
   methods: {
@@ -205,13 +218,21 @@ export default {
       }
     },
     passwordIsEqual() {
-      if (this.newPassword !== this.passwordRepeated) {
+      if (this.newPassword !== this.newPasswordRepeated) {
         this.warningPasswordIsEqualVisibility = "visible";
         this.inputPasswordRepeatedBorderColor = "#FF5E5E";
       } else {
         this.warningPasswordIsEqualVisibility = "hidden";
         this.inputPasswordRepeatedBorderColor = "#717171";
       }
+    },
+    swapPasswordVisibility() {
+      this.typePassword =
+        this.typePassword === "password" ? "text" : "password";
+    },
+    swapPasswordRepeatedVisibility() {
+      this.typePasswordRepeated =
+        this.typePasswordRepeated === "password" ? "text" : "password";
     },
   },
   created() {
@@ -285,18 +306,6 @@ export default {
 
 .warning {
   margin-top: 0.5em;
-}
-
-.container-icon {
-  position: relative;
-}
-
-.eye {
-  position: absolute;
-  left: 215px;
-  top: 14px;
-  font-size: 1.3em;
-  color: $grey-light;  
 }
 
 //******************* Responsividade ****************/
