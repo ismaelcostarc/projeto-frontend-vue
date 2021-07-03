@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card-login card">
+    <div class="card-login card card-mobile">
       <header>
         <h1>Criar conta</h1>
       </header>
@@ -9,7 +9,7 @@
         <input
           type="text"
           placeholder="Seu CPF"
-          class="input-login text"
+          class="input input-login text"
           v-mask="'###.###.###-##'"
           v-model="cpf"
           required

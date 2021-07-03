@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card card-login">
+    <div class="card card-login card-mobile">
       <header>
         <h1>Seja Bem Vindo!</h1>
       </header>
@@ -9,7 +9,7 @@
         <input
           type="text"
           placeholder="Seu CPF"
-          class="input-login text"
+          class="input input-login text"
           v-mask="'###.###.###-##'"
           v-model="cpf"
           required
@@ -18,7 +18,7 @@
         <input
           type="password"
           placeholder="Sua senha"
-          class="input-login text"
+          class="input input-login text"
           v-model="password"
           required
         />

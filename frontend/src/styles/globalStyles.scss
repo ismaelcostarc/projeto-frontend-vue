@@ -74,7 +74,7 @@ html {
 }
 
 .card-login {
-  //min-width: 20vw;
+  min-width: 20vw;
 
   & > :not(:first-child) {
     margin-top: 2em;
@@ -90,6 +90,16 @@ html {
 .card-profile {
   max-width: 20em;
   max-height: 20em;
+}
+
+.card-edit-profile {
+  max-width: 40em;
+
+  > {
+    *:not(:first-child) {
+      margin-top: 2em;
+    }
+  }
 }
 
 .form-login {
@@ -118,17 +128,24 @@ html {
   }
 }
 
-.input-login {
+.input {
   border-radius: $border-radius-input-login;
   border-style: solid;
   border-width: 1px;
   border-color: $grey-light;
   padding: 0.7em;
-  min-width: 15em;
 
   &:focus {
     outline: none;
   }
+}
+
+.input-login {
+  min-width: 15em;
+}
+
+.input-system {
+  max-width: 15em;
 }
 
 .select-login {
@@ -136,9 +153,6 @@ html {
   min-width: 100%;
   font-family: "Poppins", sans-serif;
   color: $grey-light;
-}
-
-.input-system {
 }
 
 .button {
@@ -166,6 +180,25 @@ html {
 .button-warning {
   background-color: $warning;
   color: #fff;
+}
+
+.button-success {
+  background-color: $success;
+  color: #fff;
+}
+
+.warning {
+  color: $warning;
+  font-size: 0.7em;
+}
+
+//Para telas de celular todos os cards que forem únicos na página ocupam a largura total da tela
+@media screen and (max-width: 600px) {
+  .card-mobile {
+    width: 100vh !important;
+    border-radius: 0 !important;
+    max-width: none;
+  }
 }
 
 // ***************************************************
@@ -239,9 +272,9 @@ html {
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid rgba(31,122,140, 0.2);
-  border-right: 1.1em solid rgba(31,122,140, 0.2);
-  border-bottom: 1.1em solid rgba(31,122,140, 0.2);
+  border-top: 1.1em solid rgba(31, 122, 140, 0.2);
+  border-right: 1.1em solid rgba(31, 122, 140, 0.2);
+  border-bottom: 1.1em solid rgba(31, 122, 140, 0.2);
   border-left: 1.1em solid #1f7a8c;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
@@ -269,4 +302,3 @@ html {
     transform: rotate(360deg);
   }
 }
-

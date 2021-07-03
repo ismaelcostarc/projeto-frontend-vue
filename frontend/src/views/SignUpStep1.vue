@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card-login card">
+    <div class="card-login card card-mobile">
       <header>
         <go-back-button />
         <h1>Criar conta</h1>
@@ -10,7 +10,7 @@
         <input
           type="password"
           placeholder="Escolha uma senha"
-          class="input-login text"
+          class="input input-login text"
           v-model="password"
           @blur="validatePassword"
           :style="{ 'border-color': inputPasswordBorderColor }"
@@ -23,7 +23,7 @@
         <input
           type="password"
           placeholder="Digite novamente a senha"
-          class="input-login text"
+          class="input input-login text"
           v-model="passwordRepeated"
           @blur="passwordIsEqual"
           :style="{ 'border-color': inputPasswordRepeatedBorderColor }"
@@ -39,7 +39,7 @@
         <input
           type="text"
           placeholder="Digite seu nome"
-          class="input-login text"
+          class="input input-login text"
           v-model="name"
           required
         />
@@ -47,7 +47,7 @@
         <input
           type="email"
           placeholder="Digite seu email"
-          class="input-login text"
+          class="input input-login text"
           v-model="email"
           required
         />
@@ -55,7 +55,7 @@
         <input
           type="text"
           placeholder="Digite sua data de nascimento"
-          class="input-login text"
+          class="input input-login text"
           v-mask="'##/##/####'"
           v-model="birthday"
           required
@@ -64,7 +64,7 @@
         <input
           type="tel"
           placeholder="Digite seu número de celular"
-          class="input-login text"
+          class="input input-login text"
           v-mask="'(##) #####-####'"
           v-model="phone"
           required
@@ -160,10 +160,5 @@ header {
 
 .bg {
   background-color: $bg-color-1;
-}
-
-.warning {
-  color: $warning;
-  font-size: 0.7em;
 }
 </style>

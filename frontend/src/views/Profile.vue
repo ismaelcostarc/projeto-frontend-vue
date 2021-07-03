@@ -2,7 +2,7 @@
   <div>
     <template-system>
       <main class="container">
-        <div class="card card-profile">
+        <div class="card card-profile card-mobile">
           <div class="header">
             <go-back-button></go-back-button>
             <h3>{{ customer.name }}</h3>
@@ -22,10 +22,12 @@
               <span class="label">E-mail:</span> {{ customer.email }}
             </div>
             <div class="text line">
-              <span class="label">Telefone:</span> {{ customer.phone | VMask('(##) #####-####') }}
+              <span class="label">Telefone:</span>
+              {{ customer.phone | VMask("(##) #####-####") }}
             </div>
             <div class="text line">
-              <span class="label">CEP:</span> {{ customer.zipcode | VMask('#####-###')}}
+              <span class="label">CEP:</span>
+              {{ customer.zipcode | VMask("#####-###") }}
             </div>
             <div class="text line">
               <span class="label">Cidade:</span> {{ customer.city }}
@@ -86,6 +88,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "./../styles/variables.scss";
+
 .card-profile {
   margin-top: 2em;
 }
@@ -127,6 +131,15 @@ export default {
 
   * {
     margin-bottom: 0.5em;
+  }
+}
+
+//******************* Responsividade ****************/
+@media screen and (max-width: 600px) {
+  .card {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-top: 1px solid $primary-color;
   }
 }
 </style>

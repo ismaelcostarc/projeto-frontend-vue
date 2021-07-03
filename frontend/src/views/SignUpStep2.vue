@@ -1,6 +1,6 @@
 <template>
   <div class="container bg screen">
-    <div class="card-login card">
+    <div class="card-login card card-mobile">
       <header>
         <go-back-button />
         <h1>Criar conta</h1>
@@ -12,12 +12,12 @@
           v-mask="'#####-###'"
           v-model="cep"
           placeholder="Digite seu CEP"
-          class="input-login text"
+          class="input input-login text"
           @blur="consultCEP"
           required
         />
 
-        <select v-model="state" class="input-login select-login" required>
+        <select v-model="state" class="input input-login select-login" required>
           <option selected value="">Escolha seu estado</option>
           <option value="AC">AC</option>
           <option value="AL">AL</option>
@@ -52,7 +52,7 @@
           type="text"
           v-model="city"
           placeholder="Digite sua cidade"
-          class="input-login text"
+          class="input input-login text"
           required
         />
 
