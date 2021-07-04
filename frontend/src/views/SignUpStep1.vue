@@ -1,9 +1,10 @@
 <template>
   <div class="container bg screen">
     <div class="card-login card card-mobile">
-      <header>
+      <header class="card-header">
         <go-back-button />
         <h1>Criar conta</h1>
+        <div></div>
       </header>
 
       <form class="form-login" @submit.prevent="signUpStep2">
@@ -163,20 +164,6 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "./../styles/variables.scss";
-
-header {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-
-  & > :first-child {
-    margin-right: 3em;
-  }
-
-  & > :last-child {
-    margin-right: 2em;
-  }
-}
 
 .bg {
   background-color: $bg-color-1;

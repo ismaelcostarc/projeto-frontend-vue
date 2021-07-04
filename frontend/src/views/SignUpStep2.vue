@@ -14,10 +14,9 @@
           placeholder="Digite seu CEP"
           class="input input-login text"
           @blur="consultCEP"
-          required
         />
 
-        <select v-model="state" class="input input-login select-login" required>
+        <select v-model="state" class="input input-login select-login">
           <option selected value="">Escolha seu estado</option>
           <option value="AC">AC</option>
           <option value="AL">AL</option>
@@ -53,7 +52,6 @@
           v-model="city"
           placeholder="Digite sua cidade"
           class="input input-login text"
-          required
         />
 
         <button type="submit" class="button button-default">Cadastrar</button>
@@ -92,15 +90,60 @@ export default {
         this.city = dataCEP.data.localidade;
       } catch (error) {
         if (error.response == undefined) {
-          this.$toasted.global.toastedError(
+          this.$toasted.global.toastError(
             "O usuário com o CPF e senha informados não existe"
           );
         }
       }
     },
-    signUp() {
-      //Armazena o estado e vai para o passo 2
-      this.$route.push("/sign-up-step-2");
+    async signUp() {
+      const newCustomer = { ...this.$store.state.newCustomer };
+      //Dados Opcionais
+      if (this.cep) newCustomer.zipcode = this.cep.replace("-", "");
+      if (this.city) newCustomer.city = this.city;
+      if (this.state) newCustomer.state = this.state;
+
+      if (newCustomer.cep === "") delete newCustomer.cep;
+      if (newCustomer.city === "") delete newCustomer.city;
+      if (newCustomer.state === "") delete newCustomer.state;
+
+      //Formatar os dados
+      if (newCustomer.cep) newCustomer.cep = newCustomer.cep.replace("-", "");
+      newCustomer.phone = newCustomer.phone
+        .replace("(", "")
+        .replace(")", "")
+        .replace(" ", "")
+        .replace("-", "");
+
+      const birthArray = newCustomer.birthday.split("/");
+      newCustomer.birthday = `${birthArray[2]}-${birthArray[1]}-${birthArray[0]}`;
+      newCustomer.attentend_id = null;
+
+      try {
+        const response = await customers.create(newCustomer);
+        if (response.status === 201) {
+          const token = response.data.bearer_token;
+          this.$store.commit("setToken", token);
+          this.$store.commit("setProfile", 1);
+
+          this.$store.commit("setCPF", "");
+          this.$store.commit("setPassword", "");
+          this.$store.commit("setName", "");
+          this.$store.commit("setEmail", "");
+          this.$store.commit("setBirthday", "");
+          this.$store.commit("setPhone", "");
+          this.$store.commit("setCEP", "");
+          this.$store.commit("setState", "");
+          this.$store.commit("setCity", "");
+
+          this.$router.push("/schedulings/list");
+        }
+      } catch (error) {
+        console.error(error);
+        this.$toasted.global.toastError(
+          "Ocorreu um erro em nosso servidor, por favor tente novamente"
+        );
+      }
     },
   },
 };

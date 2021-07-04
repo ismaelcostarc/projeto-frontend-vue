@@ -11,6 +11,9 @@ export default {
       }
     })
   },
+  create(customer) {
+    return https.post('/customers', customer);
+  },
   update(token, customer) {
     return https.patch('/customers',
       customer,

@@ -55,11 +55,7 @@ class CustomersController extends Controller
             'name' => 'required|max:200',     
             'email' => 'required|max:200',
             'phone' => 'required|max:20',
-            'birthday' => 'required|date_format:Y-m-d',
-            'zipcode' => 'size:10',
-            'state' => 'size:2',
-            'city' => 'max:20',
-            'attendent_id' => 'integer'
+            'birthday' => 'required|date_format:Y-m-d'  
         ]);
 
         $customer = Customers::create([
@@ -114,9 +110,6 @@ class CustomersController extends Controller
             'email' => 'max:200',
             'phone' => 'max:20',
             'birthday' => 'date',
-            'zipcode' => 'size:10',
-            'state' => 'size:2',
-            'city' => 'max:20',
             'attendent_id' => 'prohibited'
         ]);
 
@@ -156,10 +149,10 @@ class CustomersController extends Controller
 
     public function updateSelf(Request $request)
     {
+        
         //Autorização
         //Apenas clientes podem atualizar seus próprios dados
         $model = get_class(Auth::user());
-
         if ($model == Attendents::class)
             return response()->json([], 401);
 
@@ -171,12 +164,10 @@ class CustomersController extends Controller
             'email' => 'max:200',
             'phone' => 'max:20',
             'birthday' => 'date',
-            'zipcode' => 'size:10',
-            'state' => 'size:2',
-            'city' => 'max:20',
             'attendent_id' => 'prohibited'
         ]);
 
+        //dd(Auth::user());
         $customer = Customers::find(Auth::user()->id);
 
         $customer->fill($request->all());

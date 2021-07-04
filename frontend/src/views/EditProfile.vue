@@ -2,13 +2,36 @@
   <div>
     <template-system>
       <main class="container">
+        <modal v-if="modalDeleteProfileIsVisible">
+          <h3 slot="header" class="delete-profile-title">
+            Deseja excluir sua conta?
+          </h3>
+
+          <div slot="body"></div>
+          <div slot="footer">
+            <div class="group-button">
+              <button class="button button-warning" @click="deleteProfile()">
+                Sim
+              </button>
+              <button
+                class="button button-default"
+                @click="modalDeleteProfileIsVisible = false"
+              >
+                Não
+              </button>
+            </div>
+          </div>
+        </modal>
         <div class="card card-edit-profile card-mobile">
-          <div class="header">
+          <div class="card-header">
             <go-back-button></go-back-button>
             <h3>{{ customer.name }}</h3>
-            <router-link to="/customer/profile/edit">
-              <span class="material-icons trash"> delete </span>
-            </router-link>
+            <span
+              class="material-icons trash"
+              @click="modalDeleteProfileIsVisible = true"
+            >
+              delete
+            </span>
           </div>
           <form class="edit-profile-form" @submit.prevent="update()">
             <div class="row">
@@ -28,6 +51,7 @@
                 <input
                   type="text"
                   v-model="customer.birthday"
+                  v-mask="'##/##/####'"
                   class="input input-system text"
                   required
                 />
@@ -85,7 +109,6 @@
                   v-model="customer.zipcode"
                   class="input input-system text"
                   v-mask="'#####-###'"
-                  required
                 />
                 <div class="warning">.</div>
               </div>
@@ -97,19 +120,42 @@
                   type="text"
                   v-model="customer.city"
                   class="input input-system text"
-                  required
                 />
                 <div class="warning">.</div>
               </div>
 
               <div class="column">
                 <div class="label">Estado<span>:</span></div>
-                <input
-                  type="text"
-                  v-model="customer.state"
-                  class="input input-system text"
-                  required
-                />
+                <select v-model="state" class="input select-login">
+                  <option selected value="">Escolha seu estado</option>
+                  <option value="AC">AC</option>
+                  <option value="AL">AL</option>
+                  <option value="AP">AP</option>
+                  <option value="AM">AM</option>
+                  <option value="BA">BA</option>
+                  <option value="CE">CE</option>
+                  <option value="ES">ES</option>
+                  <option value="GO">GO</option>
+                  <option value="MA">MA</option>
+                  <option value="MT">MT</option>
+                  <option value="MS">MS</option>
+                  <option value="MG">MG</option>
+                  <option value="PA">PA</option>
+                  <option value="PB">PB</option>
+                  <option value="PR">PR</option>
+                  <option value="PE">PE</option>
+                  <option value="PI">PI</option>
+                  <option value="RJ">RJ</option>
+                  <option value="RN">RN</option>
+                  <option value="RS">RS</option>
+                  <option value="RO">RO</option>
+                  <option value="RR">RR</option>
+                  <option value="SC">SC</option>
+                  <option value="SP">SP</option>
+                  <option value="SE">SE</option>
+                  <option value="TO">TO</option>
+                  <option value="DF">DF</option>
+                </select>
                 <div class="warning">.</div>
               </div>
             </div>
@@ -179,17 +225,16 @@
 import TemplateSystem from "../components/TemplateSystem.vue";
 import GoBackButton from "../components/GoBackButton.vue";
 import EyePassword from "../components/EyePassword.vue";
+import Modal from "../components/Modal.vue";
 import cpfIsValid from "../assets/cpfIsValid.js";
 import customers from "../services/customers.js";
-import attendent from "../services/attendent.js";
 
 export default {
-  components: { TemplateSystem, GoBackButton, EyePassword },
+  components: { TemplateSystem, GoBackButton, EyePassword, Modal },
   name: "Profile",
   data() {
     return {
       customer: {},
-      attendentName: "",
       newPassword: "",
       inputCPFBorderColor: "#717171",
       warningValidCPFVisibility: "hidden",
@@ -198,8 +243,11 @@ export default {
       newPasswordRepeated: "",
       warningPasswordIsEqualVisibility: "hidden",
       inputPasswordRepeatedBorderColor: "#717171",
+      warningValidBirthdayVisibility: "hidden",
+      inputBirthdayBorderColor: "#717171",
       typePassword: "password",
       typePasswordRepeated: "password",
+      modalDeleteProfileIsVisible: false,
     };
   },
   methods: {
@@ -217,17 +265,10 @@ export default {
         console.error(error);
       }
     },
-    async searchAttendent() {
-      const token = this.$store.state.authenticatedUser.token;
-      try {
-        const response = await attendent.index(token);
-        this.attendentName = response.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
     checkCPF() {
-      const formattedCPF = this.customer.cpf.replaceAll('.', '').replace('-', '');
+      const formattedCPF = this.customer.cpf
+        .replaceAll(".", "")
+        .replace("-", "");
       if (!cpfIsValid(formattedCPF)) {
         this.warningValidCPFVisibility = "visible";
         this.inputCPFBorderColor = "#FF5E5E";
@@ -263,12 +304,58 @@ export default {
         this.typePasswordRepeated === "password" ? "text" : "password";
     },
     async update() {
+      //evita que o formulário seja enviado mesmo com os campos errados
+      if (
+        this.warningValidCPFVisibility === "visible" ||
+        this.warningPasswordLengthVisibility === "visible" ||
+        this.warningPasswordIsEqualVisibility === "visible" ||
+        this.warningValidBirthdayVisibility === "visible"
+      )
+        return;
 
-    }
+      //Evita que a pessoa digite o primeiro campo de senha, porém não o segundo
+      if (this.newPassword !== "" && this.newPasswordRepeated === "") {
+        this.warningPasswordIsEqualVisibility = "visible";
+        this.inputPasswordRepeatedBorderColor = "#FF5E5E";
+        return;
+      }
+
+      const token = this.$store.state.authenticatedUser.token;
+      const customerFormatted = { ...this.customer };
+      //É necessário formatar alguns campos antes de enviar para a API
+      customerFormatted.cpf = customerFormatted.cpf
+        .replaceAll(".", "")
+        .replace("-", "");
+      customerFormatted.phone = customerFormatted.phone
+        .replace("(", "")
+        .replace(")", "")
+        .replace("-", "")
+        .replace(" ", "");
+      if (customerFormatted.zipcode)
+        customerFormatted.zipcode = customerFormatted.zipcode.replace("-", "");
+      const birthArray = customerFormatted.birthday.split("/");
+      customerFormatted.birthday = `${birthArray[2]}-${birthArray[1]}-${birthArray[0]}`;
+      if (this.newPassword) {
+        customerFormatted.password = this.newPassword;
+      }
+      //O campo que contém a informação de qual atendente criou o cliente jamais deve ser alterado
+      delete customerFormatted.attendent_id;
+      //timestamps criados pelo banco de dados
+      delete customerFormatted.updated_at;
+      delete customerFormatted.created_at;
+      delete customerFormatted.deleted_at;
+
+      try {
+        const response = await customers.update(token, customerFormatted);
+        this.$toasted.global.toastSuccess("Dados salvos com sucesso");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    deleteProfile() {},
   },
   created() {
     this.searchCustomer();
-    this.searchAttendent();
   },
 };
 </script>
@@ -280,15 +367,10 @@ export default {
   margin-bottom: 2em;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
 .trash {
   color: $warning;
+  font-size: 25px;
+  cursor: pointer;  
 }
 
 .label {
@@ -299,20 +381,6 @@ export default {
 
   & > span {
     font-weight: 300;
-  }
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  //justify-content: space-between;
-}
-
-.column {
-  &:first-child {
-    margin-right: 1em;
   }
 }
 
@@ -338,16 +406,30 @@ export default {
   visibility: hidden;
 }
 
+.select-login {
+  width: 18.7em;
+}
+
+.modal-header {
+  margin-bottom: 1em;
+
+}
+
+.delete-profile-title {
+  margin: 1em;
+  text-align: center;
+}
+
+.button-warning {
+  margin-right: 2em;
+}
+
 //******************* Responsividade ****************/
 @media screen and (max-width: 600px) {
   .card {
     margin-top: 0;
     margin-bottom: 0;
     border-top: 1px solid $primary-color;
-  }
-
-  .column {
-    margin: 0 !important;
   }
 
   .warning-required-inputs {

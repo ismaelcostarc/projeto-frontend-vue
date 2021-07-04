@@ -48,7 +48,7 @@ export default {
           const response = await customers.check(formattedCPF);
           if (response.data.cpfIsRegistered === true) {
             this.inputBorderColor = "#FF5E5E";
-            this.$toasted.global.toastedError("O CPF já está registrado");
+            this.$toasted.global.toastError("O CPF já está registrado");
           } else {
             // armazenar o cpf e redirecionar para o passo 2 do cadastro
             this.$store.commit("setCPF", formattedCPF);
@@ -56,13 +56,13 @@ export default {
           }
         } catch (error) {
           console.error(error);
-          this.$toasted.global.toastedError(
+          this.$toasted.global.toastError(
             "Ocorreu um erro em nosso servidor, por favor tente novamente"
           );
         }
       } else {
         this.inputBorderColor = "#FF5E5E";
-        this.$toasted.global.toastedError("O CPF informado não é válido");
+        this.$toasted.global.toastError("O CPF informado não é válido");
       }
     },
   },

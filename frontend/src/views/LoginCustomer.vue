@@ -31,7 +31,7 @@
         <router-link to="/cpf-checking" class="link"
           >Não possui cadastro?</router-link
         >
-        <router-link to="/" class="link">Login Administrativo</router-link>
+        <!-- <router-link to="/" class="link">Login Administrativo</router-link> -->
       </footer>
     </div>
   </div>
@@ -76,19 +76,19 @@ export default {
           this.$router.push("/schedulings/list");
         } catch (error) {
           if (error.response == undefined) {
-            this.$toasted.global.toastedError(
+            this.$toasted.global.toastError(
               "Ocorreu um erro em nosso servidor, por favor tente novamente"
             );
           } else {
             if (error.response.status == 401) {
-              this.$toasted.global.toastedError(
+              this.$toasted.global.toastError(
                 "O usuário com o CPF e senha informados não existe"
               );
             }
           }
         }
       } else {
-        this.$toasted.global.toastedError("Insira um CPF válido.");
+        this.$toasted.global.toastError("Insira um CPF válido.");
       }
     },
     swapPasswordVisibility() {

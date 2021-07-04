@@ -2,8 +2,7 @@
   <div>
     <div class="topnav" id="myTopnav">
       <a href="/schedulings/list" class="active">{{ userName }}</a>
-      <span class="loader" v-if="!userName"></span>
-
+      
       <router-link
         to="/"
         class="button-exit button button-default"

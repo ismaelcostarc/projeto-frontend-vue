@@ -12,7 +12,8 @@
           </div>
           <div class="customer-data">
             <div class="text line">
-              <span class="label">Criado por:</span> {{ attendentName }}
+              <span class="label">Criado por:</span>
+              {{ attendentName || "Cadastro no sistema" }}
             </div>
             <div class="text line">
               <span class="label">Data de Nascimento:</span>
@@ -25,14 +26,14 @@
               <span class="label">Telefone:</span>
               {{ customer.phone | VMask("(##) #####-####") }}
             </div>
-            <div class="text line">
+            <div class="text line" v-if="customer.zipcode">
               <span class="label">CEP:</span>
               {{ customer.zipcode | VMask("#####-###") }}
             </div>
-            <div class="text line">
+            <div class="text line" v-if="customer.city">
               <span class="label">Cidade:</span> {{ customer.city }}
             </div>
-            <div class="text line">
+            <div class="text line" v-if="customer.state">
               <span class="label">Estado:</span> {{ customer.state }}
             </div>
           </div>
@@ -97,16 +98,8 @@ export default {
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
-
-  & > :first-child {
-    margin-right: 3em;
-  }
-
-  & > :nth-child(2) {
-    margin-right: 2em;
-  }
 }
 
 .material-icons {

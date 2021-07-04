@@ -8,6 +8,7 @@ import SchedulingsList from '../views/SchedulingsList.vue';
 import Schedule from '../views/Schedule.vue';
 import Profile from '../views/Profile.vue';
 import EditProfile from '../views/EditProfile.vue';
+import PageNotFound from '../views/PageNotFound.vue';
 import store from '../store/index.js';
 
 Vue.use(VueRouter)
@@ -42,8 +43,8 @@ const routes = [
       requiresAuth: false,
     },
     beforeEnter(to, from, next) {
-      if(from.name !== 'CPFChecking' && from.name !== 'SignUpStep2') {
-        next({name: 'LoginCustomer'});
+      if (from.name !== 'CPFChecking' && from.name !== 'SignUpStep2') {
+        next({ name: 'LoginCustomer' });
       } else {
         next();
       }
@@ -57,8 +58,8 @@ const routes = [
       requiresAuth: false,
     },
     beforeEnter(to, from, next) {
-      if(from.name !== 'SignUpStep1') {
-        next({name: 'LoginCustomer'});
+      if (from.name !== 'SignUpStep1') {
+        next({ name: 'LoginCustomer' });
       } else {
         next();
       }
@@ -96,6 +97,14 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: '*',
+    name: 'PageNotFound',
+    component: PageNotFound,
+    meta: {
+      requiresAuth: false,
+    }
+  }
 ]
 
 const router = new VueRouter({
