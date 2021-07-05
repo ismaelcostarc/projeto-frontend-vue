@@ -67,7 +67,6 @@ class SchedulingsController extends Controller
 
         //Validações
         $request->validate([
-            'date' => 'date_format',
             'health_insurance' => 'max:200',
             'place' => 'max:200',
             'exam' => 'max:200',

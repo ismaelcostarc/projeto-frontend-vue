@@ -57,7 +57,7 @@ export default {
   align-items: center;
 
   & > .modal-header {
-    align-self: flex-end;
+    align-self: stretch;
   }
 }
 

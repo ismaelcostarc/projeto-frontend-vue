@@ -16,7 +16,11 @@
               close
             </span>
           </div>
-          <form slot="body" class="form-login">
+          <form
+            slot="body"
+            class="form-login"
+            @submit.prevent="showSchedules()"
+          >
             <h3>Deseja remarcar para que dia?</h3>
             <input
               type="text"
@@ -26,6 +30,119 @@
               v-mask="'##/##/####'"
             />
             <button class="button button-default">Buscar</button>
+          </form>
+          <div slot="footer"></div>
+        </modal>
+
+        <modal v-if="modalHourRescheduleIsVisible">
+          <div slot="header" class="modal-header">
+            <span
+              class="material-icons"
+              @click="
+                modalHourRescheduleIsVisible = false;
+                modalRescheduleIsVisible = true;
+              "
+            >
+              chevron_left
+            </span>
+            <h3>Horários Disponíveis:</h3>
+            <span
+              class="material-icons"
+              @click="modalHourRescheduleIsVisible = false"
+            >
+              close
+            </span>
+          </div>
+          <form slot="body" class="form-login" @submit.prevent="reschedule()">
+            <div class="hours">
+              <div
+                class="hour"
+                @click="hourSelected = '08:00:00'"
+                v-if="hourSelected !== '08:00:00'"
+              >
+                08:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '08:00:00'"
+              >
+                08:00
+              </div>
+              <div
+                class="hour"
+                @click="hourSelected = '10:00:00'"
+                v-if="hourSelected !== '10:00:00'"
+              >
+                10:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '10:00:00'"
+              >
+                10:00
+              </div>
+              <div
+                class="hour"
+                @click="hourSelected = '12:00:00'"
+                v-if="hourSelected !== '12:00:00'"
+              >
+                12:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '12:00:00'"
+              >
+                12:00
+              </div>
+              <div
+                class="hour"
+                @click="hourSelected = '14:00:00'"
+                v-if="hourSelected !== '14:00:00'"
+              >
+                14:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '14:00:00'"
+              >
+                14:00
+              </div>
+
+              <div
+                class="hour"
+                @click="hourSelected = '16:00:00'"
+                v-if="hourSelected !== '16:00:00'"
+              >
+                16:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '16:00:00'"
+              >
+                16:00
+              </div>
+
+              <div
+                class="hour"
+                @click="hourSelected = '18:00:00'"
+                v-if="hourSelected !== '18:00:00'"
+              >
+                18:00
+              </div>
+              <div
+                class="hour hour-selected"
+                @click="hourSelected = ''"
+                v-if="hourSelected == '18:00:00'"
+              >
+                18:00
+              </div>
+            </div>
+            <button class="button button-default">Remarcar</button>
           </form>
           <div slot="footer"></div>
         </modal>
@@ -99,6 +216,7 @@
 import TemplateSystem from "../components/TemplateSystem.vue";
 import Modal from "../components/Modal.vue";
 import schedulings from "../services/schedulings.js";
+import formatDate from "../assets/formatDate.js";
 
 export default {
   name: "SchedulingsList",
@@ -114,6 +232,7 @@ export default {
       modalHourRescheduleIsVisible: false,
       modalMarkOffScheduleIsVisible: false,
       date: "",
+      hourSelected: "",
     };
   },
   methods: {
@@ -141,15 +260,15 @@ export default {
       //Toda vez que o modal aparecer é pega a data atual
       const data = new Date();
       let day = String(data.getDate());
-      if(day.length === 1) day = '0' + day;
+      if (day.length === 1) day = "0" + day;
 
       let month = String(data.getMonth() + 1);
-      if(month.length === 1) month = '0' + month;
-      console.log(month)
+      if (month.length === 1) month = "0" + month;
+      console.log(month);
 
       const year = data.getFullYear();
-      this.date = day + '/' + month + '/' + year;
-      console.log(this.date)
+      this.date = day + "/" + month + "/" + year;
+      console.log(this.date);
     },
     showModalMarkOff(id) {
       this.scheduleIdSelected = id;
@@ -160,11 +279,38 @@ export default {
 
       try {
         const response = schedulings.delete(token, this.scheduleIdSelected);
+        //Atualiza os exames na tela
+        this.getSchedulings();
         //Quando o registro do agendamento é realizado o modal some e aparece um toaster
         this.modalMarkOffScheduleIsVisible = false;
         this.$toasted.global.toastSuccess("Exame desmarcado com sucesso");
-        //Atualiza os exames na tela
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    showSchedules() {
+      this.modalRescheduleIsVisible = false;
+      this.modalHourRescheduleIsVisible = true;
+    },
+    async reschedule() {
+      //Caso o usuário não tenha selecionado nenhum dos horários
+      if (!this.hourSelected) return;
+
+      const newSchedule = {};
+      (newSchedule.date = formatDate(this.date)),
+        (newSchedule.hour = this.hourSelected);
+
+      const token = this.$store.state.authenticatedUser.token;
+
+      try {
+        const response = await schedulings.reschedule(
+          token,
+          this.scheduleIdSelected,
+          newSchedule
+        );
         this.getSchedulings();
+        this.modalHourRescheduleIsVisible = false;
+        this.$toasted.global.toastSuccess("Exame remarcado com sucesso");
       } catch (error) {
         console.error(error);
       }
@@ -206,7 +352,10 @@ header {
 
 .modal-header {
   margin-bottom: 1em;
-
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
   & > span {
     cursor: pointer;
   }
@@ -220,6 +369,29 @@ header {
 .empty-list {
   margin-top: 10em;
   color: $grey-light;
+}
+
+.hours {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hour {
+  padding: 0.5em;
+  border: 1px solid #000;
+  border-radius: $border-radius-button;
+  margin: 0.5em;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1, 1.1);
+  }
+
+  transition: transform 0.2s;
+}
+
+.hour-selected {
+  background-color: $bg-color-2;
 }
 
 //******************* Responsividade ****************/
