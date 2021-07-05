@@ -29,7 +29,7 @@ class SchedulingsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'date' => 'required|date_format:Y-m-d',
+            'date' => 'required',
             'hour' => 'required',
             'health_insurance' => 'required|max:200',
             'place' => 'required|max:200',
@@ -67,7 +67,7 @@ class SchedulingsController extends Controller
 
         //Validações
         $request->validate([
-            'date' => 'date_format:Y-m-d',
+            'date' => 'date_format',
             'health_insurance' => 'max:200',
             'place' => 'max:200',
             'exam' => 'max:200',

@@ -10,7 +10,14 @@ export default {
         })
     },
     create(token, scheduling) {
-        return https.post('schedulings')
+        return https.post('schedulings',
+            scheduling,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+
+                }
+            })
     },
     delete(token, id) {
         return https.delete(`schedulings/${id}`, {

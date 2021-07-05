@@ -18,7 +18,13 @@
           </div>
           <form slot="body" class="form-login">
             <h3>Deseja remarcar para que dia?</h3>
-            <input type="date" class="input text" required />
+            <input
+              type="text"
+              class="input text"
+              v-model="date"
+              required
+              v-mask="'##/##/####'"
+            />
             <button class="button button-default">Buscar</button>
           </form>
           <div slot="footer"></div>
@@ -81,7 +87,9 @@
             </div>
           </div>
 
-          <div v-if="!schedulings.length" class="empty-list ">Você não possui exames agendados</div>
+          <div v-if="!schedulings.length" class="empty-list">
+            Você não possui exames agendados
+          </div>
         </div>
       </main>
     </template-system>
@@ -105,6 +113,7 @@ export default {
       modalRescheduleIsVisible: false,
       modalHourRescheduleIsVisible: false,
       modalMarkOffScheduleIsVisible: false,
+      date: "",
     };
   },
   methods: {
@@ -128,6 +137,19 @@ export default {
     showModalReschedule(id) {
       this.scheduleIdSelected = id;
       this.modalRescheduleIsVisible = true;
+
+      //Toda vez que o modal aparecer é pega a data atual
+      const data = new Date();
+      let day = String(data.getDate());
+      if(day.length === 1) day = '0' + day;
+
+      let month = String(data.getMonth() + 1);
+      if(month.length === 1) month = '0' + month;
+      console.log(month)
+
+      const year = data.getFullYear();
+      this.date = day + '/' + month + '/' + year;
+      console.log(this.date)
     },
     showModalMarkOff(id) {
       this.scheduleIdSelected = id;
@@ -137,7 +159,6 @@ export default {
       const token = this.$store.state.authenticatedUser.token;
 
       try {
-        console.log(this.scheduleIdSelected);
         const response = schedulings.delete(token, this.scheduleIdSelected);
         //Quando o registro do agendamento é realizado o modal some e aparece um toaster
         this.modalMarkOffScheduleIsVisible = false;
@@ -147,16 +168,15 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    }
+    },
   },
   created() {
     this.getSchedulings();
-    console.log(this.schedulings);
   },
 };
 </script>
 <style scoped lang="scss">
-@import './../styles/variables.scss';
+@import "./../styles/variables.scss";
 
 header {
   padding: 1em;

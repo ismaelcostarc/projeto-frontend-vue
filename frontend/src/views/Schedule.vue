@@ -13,7 +13,7 @@
               <div class="column">
                 <div class="label">Tipo de Exame<span>: *</span></div>
                 <select
-                  v-model="scheduling.type"
+                  v-model="scheduling.exam"
                   class="input select-login"
                   required
                 >
@@ -109,7 +109,8 @@
 <script>
 import TemplateSystem from "../components/TemplateSystem.vue";
 import GoBackButton from "../components/GoBackButton.vue";
-import schedulings from '../services/schedulings.js';
+import customers from "../services/customers.js";
+import schedulings from "../services/schedulings.js";
 
 export default {
   components: { TemplateSystem, GoBackButton },
@@ -120,18 +121,30 @@ export default {
     };
   },
   methods: {
-    schedule() {
-      const dateArray = this.scheduling.date.split('/');
+    async schedule() {
+      const dateArray = this.scheduling.date.split("/");
       const dateFormatted = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}}`;
-      this.scheduling.date = dateFormatted;
+      const newScheduling = { ...this.scheduling };
+      newScheduling.date = dateFormatted;
+
+      const token = this.$store.state.authenticatedUser.token;
+
       try {
-        
+        const response = await customers.index(token);
+        newScheduling.customer_id = response.data.id;
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-      console.log(this.scheduling)
-    }
-  }
+
+      try {
+        const response = await schedulings.create(token, newScheduling);
+        //Sucesso
+        this.$router.push("/schedulings/list");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -184,7 +197,7 @@ export default {
 
 //******************* Responsividade ****************/
 @media screen and (max-width: 600px) {
-  .row:nth-child(3){
+  .row:nth-child(3) {
     align-self: center;
   }
 }
