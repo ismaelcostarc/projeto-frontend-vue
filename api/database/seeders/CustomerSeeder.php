@@ -15,10 +15,10 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         DB::table('customers')->insert([
-            'cpf' => '87318186094',
-            'name' => 'João Luíz da Silva',
+            'cpf' => '05675054308',
+            'name' => 'Ismael Assunção Costa',
             'password' => bcrypt('123456'),
-            'email' => 'joao@gmail.com',
+            'email' => 'ismael@gmail.com',
             'phone' => '8699844556677',
             'birthday' => '1990-03-04',
             'zipcode' => '64000000',
@@ -27,8 +27,5 @@ class CustomerSeeder extends Seeder
             'attendent_id' => 1
         ]);
 
-        \App\Models\Customers::factory()
-            ->count(20)
-            ->create();
     }
 }

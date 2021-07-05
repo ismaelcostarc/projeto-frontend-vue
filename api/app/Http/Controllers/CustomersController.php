@@ -189,4 +189,6 @@ class CustomersController extends Controller
 
         $customer->delete();
     }
+
+
 }

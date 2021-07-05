@@ -29,10 +29,10 @@ export default {
     reschedule(token, id, newSchedule) {
         return https.patch(`schedulings/${id}`,
             newSchedule, {
-            headers: {
-                Authorization: `Bearer ${token}`
+                headers: {
+                   Authorization: `Bearer ${token}`
+                }
             }
-        }
         )
     }
 }

@@ -55,10 +55,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  & > .modal-header {
-    align-self: stretch;
-  }
 }
 
 .modal-header h3 {

@@ -23,6 +23,15 @@ export default {
         }
       }
     )
+  },
+  delete(token) {
+    return https.delete('/customers',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
   }
   /*
     list: (cpf) => {

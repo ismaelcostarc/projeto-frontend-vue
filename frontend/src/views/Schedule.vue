@@ -138,6 +138,7 @@ export default {
 
       try {
         const response = await schedulings.create(token, newScheduling);
+        this.$toasted.global.toastSuccess("Exame agendado");
         //Sucesso
         this.$router.push("/schedulings/list");
       } catch (error) {

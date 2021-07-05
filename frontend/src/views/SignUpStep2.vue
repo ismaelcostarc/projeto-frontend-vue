@@ -136,6 +136,7 @@ export default {
           this.$store.commit("setState", "");
           this.$store.commit("setCity", "");
 
+          this.$toasted.global.toastSuccess("Seja bem-vindo!");
           this.$router.push("/schedulings/list");
         }
       } catch (error) {

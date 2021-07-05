@@ -3,9 +3,11 @@
     <template-system>
       <main class="container">
         <modal v-if="modalDeleteProfileIsVisible">
-          <h3 slot="header" class="delete-profile-title">
-            Deseja excluir sua conta?
-          </h3>
+          <div slot="header" class="delete-profile-title">
+            <div></div>
+            <h3>Deseja excluir sua conta?</h3>
+            <div></div>
+          </div>
 
           <div slot="body"></div>
           <div slot="footer">
@@ -22,6 +24,45 @@
             </div>
           </div>
         </modal>
+
+        <!--
+        <modal v-if="modalTypePasswordIsVisible">
+          <div slot="header" class="delete-profile-title">
+            <div></div>
+            <div></div>
+            <span
+              class="material-icons close"
+              @click="modalTypePasswordIsVisible = false"
+            >
+              close
+            </span>
+          </div>
+
+          <div slot="body">
+            <h3>Digite sua senha para excluir sua conta:</h3>
+            <form
+              class="type-password-modal-form"
+              @submit.prevent="deleteProfileStep2()"
+            >
+              <eye-password
+                top="13px"
+                left="215px"
+                @swap="swapPasswordToDeleteVisibility()"
+              >
+                <input
+                  :type="typePasswordToDeleteProfile"
+                  placeholder="******"
+                  class="input input-system text"
+                  v-model="passwordToDeleteProfile"
+                  required
+                />
+              </eye-password>
+              <button class="button button-warning">Excluir</button>
+            </form>
+          </div>
+          <div slot="footer"></div>
+        </modal>
+-->
         <div class="card card-edit-profile card-mobile">
           <div class="card-header">
             <go-back-button></go-back-button>
@@ -248,6 +289,9 @@ export default {
       typePassword: "password",
       typePasswordRepeated: "password",
       modalDeleteProfileIsVisible: false,
+      modalTypePasswordIsVisible: false,
+      passwordToDeleteProfile: "",
+      typePasswordToDeleteProfile: "password",
     };
   },
   methods: {
@@ -352,7 +396,25 @@ export default {
         console.error(error);
       }
     },
-    deleteProfile() {},
+    swapPasswordToDeleteVisibility() {
+      this.typePasswordToDeleteProfile =
+        this.typePasswordToDeleteProfile === "password" ? "text" : "password";
+    },
+    async deleteProfile() {
+      const token = this.$store.state.authenticatedUser.token;
+      try {
+        const response = await customers.delete(token);
+        console.log(response);
+
+        this.$toasted.global.toastSuccess("Seu perfil foi excluído");
+        this.$store.commit("SetToken", "");
+        this.$store.commit("SetProfile", 0);
+
+        this.$router.push("/");
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   created() {
     this.searchCustomer();
@@ -370,7 +432,7 @@ export default {
 .trash {
   color: $warning;
   font-size: 25px;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .label {
@@ -412,16 +474,34 @@ export default {
 
 .modal-header {
   margin-bottom: 1em;
+  align-self: flex-end;
+}
 
+.group-button {
+  & > .button-warning {
+    margin-right: 2em;
+  }
 }
 
 .delete-profile-title {
-  margin: 1em;
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  width: 350px;
+
+  & > span {
+    cursor: pointer;
+  }
 }
 
-.button-warning {
-  margin-right: 2em;
+.type-password-modal-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > * {
+    margin-top: 1em;
+  }
 }
 
 //******************* Responsividade ****************/
