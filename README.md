@@ -1,4 +1,4 @@
-﻿# teste-frontend-vue
+﻿# projeto-frontend-vue
 
 # Projeto Laravel + Vue
 
